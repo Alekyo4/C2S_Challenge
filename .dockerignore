@@ -1,0 +1,8 @@
+# Project
+.storage
+
+# Formatter
+.ruff_cache
+
+# VSCode
+.vscode

@@ -6,12 +6,16 @@ readme = "README.md"
 requires-python = ">=3.12"
 
 dependencies = [
+    "faker>=37.8.0",
+    "psycopg2-binary>=2.9.10",
+    "python-dotenv>=1.1.1",
+    "python-ulid>=3.1.0",
     "sqlalchemy>=2.0.43",
     "typer>=0.17.4",
 ]
 
 [project.scripts]
-c2s = "c2s_challenge.cli:app"
+c2s = "c2s_challenge.cli:cli"
 
 [tool.taskipy.tasks]
 dev = "uv run c2s_challenge"
