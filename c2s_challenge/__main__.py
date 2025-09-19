@@ -1,3 +1,3 @@
-from c2s_challenge.cli import app
+from c2s_challenge.cli import cli
 
-app()
+cli()
