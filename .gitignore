@@ -1,3 +1,10 @@
+# Project
+.storage
+
+# Env files
+.env
+.env.production
+
 # Python-generated files
 __pycache__/
 *.py[oc]
