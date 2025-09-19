@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from c2s_challenge.config import ConfigProvider
 
-from .models import ORM
+from .orm import ORM
 
 from .database import DatabaseProvider
 
