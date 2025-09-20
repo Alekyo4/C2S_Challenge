@@ -14,6 +14,8 @@ from c2s_challenge.common.protocol.exception import ProtocolRequestInvalid, Prot
 
 from c2s_challenge.common.setting import SettingProvider
 
+from .event import EventRouterProvider
+
 from .exception import ServerWithoutContext
 
 from .abstract import AsyncServerProvider
@@ -21,13 +23,17 @@ from .abstract import AsyncServerProvider
 class AsyncServer(AsyncServerProvider):
   io: AsyncIoServer
 
+  router: EventRouterProvider
+
   host: str
   port: int
-
-  def __init__(self, setting: SettingProvider):
+  
+  def __init__(self, setting: SettingProvider, router: EventRouterProvider):
     self.host = setting.get_required("SV_HOST")
 
     self.port = int(setting.get_required("SV_PORT"))
+
+    self.router = router
   
   async def __aenter__(self) -> Self:
     self.io = await async_server(
@@ -59,7 +65,7 @@ class AsyncServer(AsyncServerProvider):
       
       request: Request = Protocol.parse_request(raw)
 
-      print(request.event.name, request.data)
+      response = await self.router.route(request)
     except (ProtocolRequestInvalid, ProtocolNotFoundEvent) as e:
       response = Response(status="error", data=str(e))
     except Exception:

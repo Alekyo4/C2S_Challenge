@@ -2,9 +2,9 @@ from c2s_challenge.common import Vehicle as VehicleModel
 
 from .orm import VehicleORM
 
-from .abstract import DatabaseProvider
+from .abstract import DatabaseProvider, DatabaseRepository
 
-class VehicleRepository:
+class VehicleRepository(DatabaseRepository):
   db: DatabaseProvider
 
   def __init__(self, database: DatabaseProvider):

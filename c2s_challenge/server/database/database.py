@@ -4,9 +4,9 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from c2s_challenge.common.setting import SettingProvider
 
-from .orm import ORM
+from .orm import BaseORM
 
-from .database import DatabaseProvider
+from .abstract import DatabaseProvider
 
 class Database(DatabaseProvider):
   engine: Engine
@@ -24,7 +24,7 @@ class Database(DatabaseProvider):
       autocommit=False)
     
     if setting.is_dev():
-      ORM.metadata.create_all(self.engine)
+      BaseORM.metadata.create_all(self.engine)
 
   def get_session(self) -> Session:
     return self.session_factory()

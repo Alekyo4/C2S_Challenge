@@ -12,7 +12,7 @@ class RequestEvent(PyEnum):
   VEHICLE_SEARCH: EventMapper = ("vehicle-search", VehicleSearchDto)
 
   def __init__(self, name: str, dto: type[BaseModel]):
-    self.name = name
+    self.evt_name = name
 
     self.dto = dto
 

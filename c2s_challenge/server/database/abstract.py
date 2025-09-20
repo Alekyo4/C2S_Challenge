@@ -1,6 +1,10 @@
 from abc import ABC, abstractmethod
 
+from contextlib import contextmanager
+
 from sqlalchemy.orm import Session
+
+from pydantic import BaseModel
 
 from urllib.parse import urlparse
 
@@ -16,4 +20,14 @@ class DatabaseProvider(ABC):
 
   @abstractmethod
   def get_session(self) -> Session:
+    raise NotImplementedError()
+
+class DatabaseRepository(ABC):
+  @abstractmethod
+  def __init__(self, database: DatabaseProvider):
+    raise NotImplementedError()
+  
+  @abstractmethod
+  @contextmanager
+  def add(self, vehicle: BaseModel) -> BaseModel:
     raise NotImplementedError()

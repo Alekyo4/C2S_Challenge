@@ -6,9 +6,11 @@ from typing import Self, Type
 
 from c2s_challenge.common.setting import SettingProvider
 
+from .event import EventRouterProvider
+
 class ServerProvider(ABC):
   @abstractmethod
-  def __init__(self, setting: SettingProvider) -> None:
+  def __init__(self, setting: SettingProvider, router: EventRouterProvider) -> None:
     raise NotImplementedError() 
 
 class AsyncServerProvider(ServerProvider):

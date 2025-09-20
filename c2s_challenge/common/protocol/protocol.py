@@ -18,7 +18,7 @@ class Protocol:
         raise ProtocolRequestInvalid()
       
       event: RequestEvent | None = next(
-        (evt for evt in RequestEvent if evt.name == event_name), None)
+        (evt for evt in RequestEvent if evt.evt_name == event_name), None)
 
       if not event:
         raise ProtocolNotFoundEvent()
