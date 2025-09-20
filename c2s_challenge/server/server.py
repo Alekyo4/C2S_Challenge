@@ -6,7 +6,7 @@ from asyncio import (
 
 from types import TracebackType
 
-from typing import Self, Type
+from typing import Self
 
 from c2s_challenge.common.protocol import Protocol, Request, Response
 
@@ -22,18 +22,9 @@ from .abstract import AsyncServerProvider
 
 class AsyncServer(AsyncServerProvider):
   io: AsyncIoServer
-
-  router: EventRouterProvider
-
-  host: str
-  port: int
   
   def __init__(self, setting: SettingProvider, router: EventRouterProvider):
-    self.host = setting.get_required("SV_HOST")
-
-    self.port = int(setting.get_required("SV_PORT"))
-
-    self.router = router
+    super().__init__(setting=setting, router=router)
   
   async def __aenter__(self) -> Self:
     self.io = await async_server(
@@ -43,11 +34,11 @@ class AsyncServer(AsyncServerProvider):
   
   async def __aexit__(
       self,
-      _exc_type: Type[BaseException] | None,
+      _exc_type: type[BaseException] | None,
       _exc_val: BaseException | None,
       _exc_tb: TracebackType | None,
     ) -> None:
-    if not hasattr(self, 'io') or not self.io:
+    if not self.io:
       return
     
     self.io.close()
@@ -84,7 +75,7 @@ class AsyncServer(AsyncServerProvider):
       await writer.wait_closed()
   
   async def listen(self) -> None:
-    if not hasattr(self, "io") or not self.io:
+    if not self.io:
       raise ServerWithoutContext()
     
     async with self.io:

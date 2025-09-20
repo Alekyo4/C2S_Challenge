@@ -8,7 +8,7 @@ from decimal import Decimal
 
 from ulid import ULID
 
-from c2s_challenge.common.entity import VehicleTransmission, VehicleFuelType, VehicleColor
+from c2s_challenge.common.model import VehicleTransmission, VehicleFuelType, VehicleColor
 
 class BaseORM(DeclarativeBase):
   pass

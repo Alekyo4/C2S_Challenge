@@ -59,5 +59,5 @@ class Vehicle(BaseModel):
   updated_at: str | None = None
 
   class Config:
-      use_enum_values = True
-      from_attributes = True
+    use_enum_values = True
+    from_attributes = True

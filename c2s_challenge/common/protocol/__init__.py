@@ -1,3 +1,3 @@
 from .protocol import Protocol
 
-from .request import Request, Response
+from .model import Request, Response

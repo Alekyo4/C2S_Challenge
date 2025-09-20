@@ -1,4 +1,4 @@
-from c2s_challenge.common.protocol.request import RequestEvent
+from c2s_challenge.common.protocol.model import RequestEvent
 
 from c2s_challenge.common.setting import Setting, SettingProvider
 
@@ -12,8 +12,8 @@ from .database.repository import VehicleRepository
 
 from .abstract import AsyncServerProvider, SyncServerProvider
 
-def make_server(database: DatabaseProvider | None = None, setting: SettingProvider | None = None) -> SyncServerProvider:
-  """Factory function to create a Server instance."""
+def make_server_sync(database: DatabaseProvider | None = None, setting: SettingProvider | None = None) -> SyncServerProvider:
+  """Factory function to create a SyncServer instance."""
   raise NotImplementedError()
 
 def make_server_async(database: DatabaseProvider | None = None, setting: SettingProvider | None = None) -> AsyncServerProvider:
@@ -35,4 +35,4 @@ def make_server_async(database: DatabaseProvider | None = None, setting: Setting
     RequestEvent.VEHICLE_SEARCH: vehicle_search_handler
   })
 
-  return AsyncServer(setting, router)
+  return AsyncServer(setting=setting, router=router)

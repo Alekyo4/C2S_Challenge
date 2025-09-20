@@ -1,6 +1,6 @@
 from c2s_challenge.common.protocol import Request, Response
 
-from c2s_challenge.common.protocol.request import RequestEvent
+from c2s_challenge.common.protocol.model import RequestEvent
 
 from .abstract import EventRouterProvider, EventHandler
 

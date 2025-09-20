@@ -1,1 +1,1 @@
-from .entity import Vehicle
+from .model import Vehicle

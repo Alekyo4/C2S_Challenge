@@ -1,6 +1,6 @@
 from c2s_challenge.common.protocol import Response
 
-from c2s_challenge.common.protocol.dto import VehicleSearchDto
+from c2s_challenge.common.protocol.dto import VehicleSearchIDto, VehicleSearchODto
 
 from c2s_challenge.server.database import VehicleRepository
 
@@ -12,5 +12,7 @@ class VehicleSearchHandler(EventHandler):
   def __init__(self, repository: VehicleRepository):
     self.repository = repository
 
-  async def handle(self, data: VehicleSearchDto) -> Response:
-    pass
+  async def handle(self, data: VehicleSearchIDto) -> Response:
+    result: VehicleSearchODto = VehicleSearchODto(id="123", make="success")
+
+    return Response(status="success", data=result)

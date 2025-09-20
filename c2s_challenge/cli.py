@@ -2,6 +2,8 @@ from asyncio import run as asyncio
 
 from typer import Typer
 
+from c2s_challenge.client import make_client_async
+
 from c2s_challenge.server import make_server_async
 
 cli: Typer = Typer()
@@ -16,7 +18,11 @@ def server() -> None:
 
 @cli.command()
 def client() -> None:
-  print("Starting client...")
+  async def run_client_async() -> None:
+    async with make_client_async() as cl:
+      await cl.start()
+
+  asyncio(run_client_async())
 
 if __name__ == "__main__":
   cli()
