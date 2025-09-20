@@ -10,6 +10,8 @@ from typing import Self, Type
 
 from c2s_challenge.common.protocol import Protocol, Request, Response
 
+from c2s_challenge.common.protocol.exception import ProtocolRequestInvalid, ProtocolNotFoundEvent
+
 from c2s_challenge.common.setting import SettingProvider
 
 from .exception import ServerWithoutContext
@@ -58,6 +60,8 @@ class AsyncServer(AsyncServerProvider):
       request: Request = Protocol.parse_request(raw)
 
       print(request.event.name, request.data)
+    except (ProtocolRequestInvalid, ProtocolNotFoundEvent) as e:
+      response = Response(status="error", data=str(e))
     except Exception:
       response = Response(status="error", data="An internal server error occurred")
     finally:
@@ -65,6 +69,9 @@ class AsyncServer(AsyncServerProvider):
         writer.write(response.model_dump_json().encode("utf-8"))
 
         await writer.drain()
+
+      if writer.can_write_eof():
+        writer.write_eof()
 
       writer.close()
 
