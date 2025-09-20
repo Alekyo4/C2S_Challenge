@@ -46,32 +46,28 @@ class AsyncServer(AsyncServerProvider):
     await self.io.wait_closed()
   
   async def __handle_request(self, reader: StreamReader, writer: StreamWriter):
-    response: Response | None = None
-
     try:
-      raw: bytes = await reader.read(4096)
+      while True:
+        try:
+          raw: bytes = await reader.readline()
 
-      if not raw:
-        return
-      
-      request: Request = Protocol.parse_request(raw)
+          if not raw:
+            break
 
-      response = await self.router.route(request)
-    except (ProtocolRequestInvalid, ProtocolNotFoundEvent) as e:
-      response = Response(status="error", data=str(e))
-    except Exception:
-      response = Response(status="error", data="An internal server error occurred")
-    finally:
-      if response:
-        writer.write(response.model_dump_json().encode("utf-8"))
+          request: Request = Protocol.parse_request(raw)
+
+          response: Response = await self.router.route(request)
+        except (ProtocolRequestInvalid, ProtocolNotFoundEvent) as e:
+          response: Response = Response(status="error", data=str(e))
+        except Exception:
+          response: Response = Response(status="error", data="An internal server error occurred")
+
+        writer.write(response.model_dump_json().encode("utf-8") + b"\n")
 
         await writer.drain()
-
-      if writer.can_write_eof():
-        writer.write_eof()
-
+    finally:
       writer.close()
-
+      
       await writer.wait_closed()
   
   async def listen(self) -> None:

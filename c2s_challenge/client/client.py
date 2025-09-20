@@ -12,7 +12,7 @@ from c2s_challenge.common.protocol import Protocol, Request, Response
 
 from c2s_challenge.common.protocol.model import RequestEvent
 
-from c2s_challenge.common.protocol.dto import VehicleSearchIDto, VehicleSearchODto
+from c2s_challenge.common.protocol.dto import VehicleSearchChatIDto, VehicleSearchChatODto, ChatMessageDto
 
 from c2s_challenge.common.logger import Logger, get_logger
 
@@ -69,21 +69,39 @@ class AsyncClient(AsyncClientProvider):
   async def __send_request(self, request: Request) -> Response:
     request_raw: bytes = request.model_dump_json().encode("utf-8")
     
-    self.__writer.write(request_raw)
+    self.__writer.write(request_raw + b"\n")
 
     await self.__writer.drain()
     
-    response_raw: bytes = await self.__reader.read(4096)
+    response_raw: bytes = await self.__reader.readuntil()
 
     return Protocol.parse_response(response_raw)
+  
+  @__require_connection
+  async def vehicle_search_chat(self, history: list[ChatMessageDto]) -> Response:
+    dto: VehicleSearchChatIDto = VehicleSearchChatIDto(history=history)
+
+    request: Request = Request(event=RequestEvent.VEHICLE_SEARCH_CHAT, data=dto)
+
+    return await self.__send_request(request)
   
   async def start(self) -> None:
     print("🤖 Olá! Sou seu assistente automotivo. Como posso ajudar a encontrar seu próximo carro?")
 
-    dto: VehicleSearchIDto = VehicleSearchIDto(make="123", model="testando")
+    history: list[ChatMessageDto] = []
 
-    request: Request = Request(event=RequestEvent.VEHICLE_SEARCH, data=dto)
+    while True:
+      prompt: str = await to_thread(input, "📤 Send: ")
 
-    vehicle_search: VehicleSearchODto = await self.__send_request(request)
+      history.append(ChatMessageDto(role="user", content=prompt))
 
-    print(vehicle_search)
+      response: Response = await self.vehicle_search_chat(history)
+
+      if response.status != "success":
+        return
+
+      result: VehicleSearchChatODto = response.data
+
+      history.append(ChatMessageDto(role="assistant", content=result.content))
+
+      print(result)

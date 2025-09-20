@@ -13,6 +13,6 @@ class VehicleSearchHandler(EventHandler):
     self.repository = repository
 
   async def handle(self, data: VehicleSearchIDto) -> Response:
-    result: VehicleSearchODto = VehicleSearchODto(id="123", make="success")
+    result: VehicleSearchODto = VehicleSearchODto()
 
     return Response(status="success", data=result)

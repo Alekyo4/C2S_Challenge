@@ -12,9 +12,7 @@ class EventHandler(ABC):
     raise NotImplementedError()
 
 class EventRouterProvider(ABC):
-  @abstractmethod
-  def __init__(self, handlers: dict[RequestEvent, EventHandler]):
-    raise NotImplementedError()
+  handlers: dict[RequestEvent, EventHandler]
   
   @abstractmethod
   async def route(self, request: Request) -> Response:
