@@ -2,7 +2,7 @@ from sqlalchemy import create_engine, Engine
 
 from sqlalchemy.orm import Session, sessionmaker
 
-from c2s_challenge.config import ConfigProvider
+from c2s_challenge.common.config import ConfigProvider
 
 from .orm import ORM
 

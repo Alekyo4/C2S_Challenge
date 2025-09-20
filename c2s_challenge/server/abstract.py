@@ -4,7 +4,7 @@ from types import TracebackType
 
 from typing import Self, Type
 
-from c2s_challenge.config import ConfigProvider
+from c2s_challenge.common.config import ConfigProvider
 
 class ServerProvider(ABC):
   @abstractmethod

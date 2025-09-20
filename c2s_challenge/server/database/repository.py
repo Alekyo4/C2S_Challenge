@@ -1,4 +1,4 @@
-from c2s_challenge.core import Vehicle as VehicleModel
+from c2s_challenge.common import Vehicle as VehicleModel
 
 from .orm import VehicleORM
 

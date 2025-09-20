@@ -8,7 +8,7 @@ from types import TracebackType
 
 from typing import Self, Type
 
-from c2s_challenge.config import ConfigProvider
+from c2s_challenge.common.config import ConfigProvider
 
 from .exception import ServerWithoutContext
 
@@ -30,7 +30,7 @@ class AsyncServer(AsyncServerProvider):
       self.__handle_request, self.host, self.port)
 
     return self
-
+  
   async def __aexit__(
       self,
       _exc_type: Type[BaseException] | None,
@@ -43,15 +43,9 @@ class AsyncServer(AsyncServerProvider):
     self.io.close()
     
     await self.io.wait_closed()
-
+  
   async def __handle_request(self, reader: StreamReader, writer: StreamWriter):
-    addr: any = writer.get_extra_info("peername")
-
-    print(addr)
-
-    writer.close()
-
-    await writer.wait_closed()
+    data: bytes = await reader.read()
   
   async def listen(self) -> None:
     if not hasattr(self, "io") or not self.io:

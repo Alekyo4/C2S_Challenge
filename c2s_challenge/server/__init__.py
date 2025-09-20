@@ -1,4 +1,4 @@
-from c2s_challenge.config import Config, ConfigProvider
+from c2s_challenge.common.config import Config, ConfigProvider
 
 from .abstract import AsyncServerProvider, SyncServerProvider
 

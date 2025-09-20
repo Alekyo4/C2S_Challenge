@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from urllib.parse import urlparse
 
-from c2s_challenge.config import ConfigProvider
+from c2s_challenge.common.config import ConfigProvider
 
 class DatabaseProvider(ABC):
   db_url: str
