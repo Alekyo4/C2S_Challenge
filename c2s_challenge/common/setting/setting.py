@@ -1,10 +1,10 @@
 from dotenv import dotenv_values
 
-from .abstract import ConfigProvider
+from .abstract import SettingProvider
 
-from .exception import ConfigNotFound
+from .exception import SettingNotFound
 
-class Config(ConfigProvider):
+class Setting(SettingProvider):
   envs: list[str] = ["development", "production"]
 
   __raw: dict[str, str] = {}
@@ -27,7 +27,7 @@ class Config(ConfigProvider):
     value: str | None = self.get(key, None)
 
     if value is None:
-      raise ConfigNotFound(key)
+      raise SettingNotFound(key)
 
     return value
   

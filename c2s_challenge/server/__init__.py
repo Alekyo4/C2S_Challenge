@@ -1,16 +1,16 @@
-from c2s_challenge.common.config import Config, ConfigProvider
+from c2s_challenge.common.setting import Setting, SettingProvider
 
 from .abstract import AsyncServerProvider, SyncServerProvider
 
-def make_server(config: ConfigProvider | None = None) -> SyncServerProvider:
+def make_server(setting: SettingProvider | None = None) -> SyncServerProvider:
   """Factory function to create a Server instance."""
   raise NotImplementedError()
 
-def make_server_async(config: ConfigProvider | None = None) -> AsyncServerProvider:
+def make_server_async(setting: SettingProvider | None = None) -> AsyncServerProvider:
   """Factory function to create a AsyncServer instance."""
   from .server import AsyncServer
 
-  if config is None:
-    config = Config()
+  if setting is None:
+    setting = Setting()
 
-  return AsyncServer(config)
+  return AsyncServer(setting)

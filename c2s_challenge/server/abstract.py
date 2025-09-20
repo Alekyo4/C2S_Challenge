@@ -4,11 +4,11 @@ from types import TracebackType
 
 from typing import Self, Type
 
-from c2s_challenge.common.config import ConfigProvider
+from c2s_challenge.common.setting import SettingProvider
 
 class ServerProvider(ABC):
   @abstractmethod
-  def __init__(self, config: ConfigProvider) -> None:
+  def __init__(self, setting: SettingProvider) -> None:
     raise NotImplementedError() 
 
 class AsyncServerProvider(ServerProvider):
