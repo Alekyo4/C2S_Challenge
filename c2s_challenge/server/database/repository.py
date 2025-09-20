@@ -5,6 +5,8 @@ from .orm import VehicleORM
 from .abstract import DatabaseProvider
 
 class VehicleRepository:
+  db: DatabaseProvider
+
   def __init__(self, database: DatabaseProvider):
     self.db = database
 

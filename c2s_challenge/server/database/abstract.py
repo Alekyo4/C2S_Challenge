@@ -7,6 +7,8 @@ from urllib.parse import urlparse
 from c2s_challenge.config import ConfigProvider
 
 class DatabaseProvider(ABC):
+  db_url: str
+
   def __init__(self, config: ConfigProvider) -> None:
     connc: str = config.get_required("DB_URL")
 
