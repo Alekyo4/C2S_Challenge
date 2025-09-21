@@ -1,5 +1,6 @@
-# ER Diagram
-Database relation structure diagram
+# Database
+
+## 1. Structure Diagram
 
 ```mermaid
 erDiagram
