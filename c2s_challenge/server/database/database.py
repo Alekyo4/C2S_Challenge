@@ -1,30 +1,28 @@
-from sqlalchemy import create_engine, Engine
-
+from sqlalchemy import Engine, create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
-from c2s_challenge.config import ConfigProvider
+from c2s_challenge.common.setting import SettingProvider
 
-from .models import ORM
+from .orm import BaseORM
+from .provider import DatabaseProvider
 
-from .database import DatabaseProvider
 
 class Database(DatabaseProvider):
-  engine: Engine
-  
-  session_factory: sessionmaker[Session]
-  
-  def __init__(self, config: ConfigProvider) -> None:
-    super().__init__(config)
+    engine: Engine
 
-    self.engine = create_engine(self.db_url, echo=config.is_dev())
+    session_factory: sessionmaker[Session]
 
-    self.session_factory = sessionmaker(
-      bind=self.engine,
-      autoflush=False,
-      autocommit=False)
-    
-    if config.is_dev():
-      ORM.metadata.create_all(self.engine)
+    def __init__(self, setting: SettingProvider) -> None:
+        super().__init__(setting)
 
-  def get_session(self) -> Session:
-    return self.session_factory()
+        self.engine = create_engine(self.db_url, echo=setting.is_dev())
+
+        self.session_factory = sessionmaker(
+            bind=self.engine, autoflush=False, autocommit=False
+        )
+
+        if setting.is_dev():
+            BaseORM.metadata.create_all(self.engine)
+
+    def get_session(self) -> Session:
+        return self.session_factory()

@@ -1,0 +1,24 @@
+from c2s_challenge.client.agent import VehicleAgent
+from c2s_challenge.common.setting import Setting, SettingProvider
+
+from .provider import AsyncClientProvider, SyncClientProvider
+
+
+def make_client_sync(setting: SettingProvider | None = None) -> SyncClientProvider:
+    """Factory function to create a SyncClient instance."""
+    raise NotImplementedError()
+
+
+def make_client_async(setting: SettingProvider | None = None) -> AsyncClientProvider:
+    """Factory function to create a AsyncClient instance."""
+    from .client import AsyncClient
+
+    if setting is None:
+        setting = Setting()
+
+    return AsyncClient(setting=setting)
+
+
+async def make_vehicle_agent(client: AsyncClientProvider) -> VehicleAgent:
+    """Factory function to create a VehicleAgent instance"""
+    return VehicleAgent(client=client)
