@@ -7,8 +7,8 @@ from c2s_challenge.common.logger import Logger, get_logger
 from c2s_challenge.common.protocol import Protocol, Request, Response
 from c2s_challenge.common.setting import SettingProvider
 
-from .abstract import AsyncClientProvider
-from .exception import ClientWithoutContext
+from .exception import ClientResponseError, ClientWithoutContext
+from .provider import AsyncClientProvider
 
 
 class AsyncClient(AsyncClientProvider):
@@ -57,7 +57,7 @@ class AsyncClient(AsyncClientProvider):
         return wrapper
 
     @__require_connection
-    async def send_request(self, request: Request) -> Response:
+    async def send_request(self, request: Request, strict: bool = False) -> Response:
         request_raw: bytes = request.model_dump_json().encode("utf-8")
 
         self.__writer.write(request_raw + b"\n")
@@ -66,4 +66,9 @@ class AsyncClient(AsyncClientProvider):
 
         response_raw: bytes = await self.__reader.readuntil()
 
-        return Protocol.parse_response(response_raw)
+        response: Response = Protocol.parse_response(response_raw)
+
+        if not strict and response.status != "success":
+            raise ClientResponseError(response)
+
+        return response

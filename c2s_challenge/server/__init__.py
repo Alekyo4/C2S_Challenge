@@ -1,12 +1,11 @@
 from c2s_challenge.common.protocol.model import RequestEvent
 from c2s_challenge.common.setting import Setting, SettingProvider
 
-from .abstract import AsyncServerProvider, SyncServerProvider
 from .agent import AgentAIProvider, GeminiAgentAI
-from .database import Database, DatabaseProvider, DatabaseRepository
-from .database.repository import VehicleRepository
+from .database import Database, DatabaseProvider
 from .event import EventRouter, EventRouterProvider
 from .event.handler import VehicleChatHandler, VehicleSearchHandler
+from .provider import AsyncServerProvider, SyncServerProvider
 
 
 def make_server_sync(
@@ -35,10 +34,8 @@ def make_server_async(
     if agent_ai is None:
         agent_ai = GeminiAgentAI(setting=setting)
 
-    vehicle_repository: DatabaseRepository = VehicleRepository(database=database)
-
     vehicle_search_handler: VehicleSearchHandler = VehicleSearchHandler(
-        repository=vehicle_repository
+        database=database
     )
 
     vehicle_chat_handler: VehicleChatHandler = VehicleChatHandler(agent_ai=agent_ai)

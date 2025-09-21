@@ -11,8 +11,8 @@ from pydantic import BaseModel
 from c2s_challenge.common.protocol.dto import ChatMessageDto
 from c2s_challenge.common.setting import SettingProvider
 
-from .abstract import AgentAIProvider
 from .model import LLMResponse
+from .provider import AgentAIProvider
 
 
 class GeminiAgentAI(AgentAIProvider):

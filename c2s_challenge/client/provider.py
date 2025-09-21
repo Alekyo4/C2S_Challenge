@@ -31,7 +31,7 @@ class AsyncClientProvider(ClientProvider):
         raise NotImplementedError()
 
     @abstractmethod
-    async def send_request(self, request: Request) -> Response:
+    async def send_request(self, request: Request, strict: bool = False) -> Response:
         raise NotImplementedError()
 
 
@@ -50,5 +50,5 @@ class SyncClientProvider(ClientProvider):
         raise NotImplementedError()
 
     @abstractmethod
-    def send_request(self, request: Request) -> Response:
+    def send_request(self, request: Request, strict: bool = False) -> Response:
         raise NotImplementedError()

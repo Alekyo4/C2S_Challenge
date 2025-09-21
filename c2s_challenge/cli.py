@@ -27,7 +27,7 @@ def client() -> None:
         async with make_client_async() as cl:
             agent: VehicleAgent = await make_vehicle_agent(client=cl)
 
-            await agent.search_interactive()
+            await agent.run_interactive()
 
     asyncio(run_client_async())
 

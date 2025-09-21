@@ -19,9 +19,9 @@ from c2s_challenge.common.protocol.exception import (
 )
 from c2s_challenge.common.setting import SettingProvider
 
-from .abstract import AsyncServerProvider
 from .event import EventRouterProvider
 from .exception import ServerWithoutContext
+from .provider import AsyncServerProvider
 
 
 class AsyncServer(AsyncServerProvider):
@@ -69,7 +69,7 @@ class AsyncServer(AsyncServerProvider):
                         status="error", data="An internal server error occurred"
                     )
 
-                    self.logger.warning("Response sent with error", e)
+                    self.logger.warning("Response sent with error", exc_info=e)
 
                 writer.write(response.model_dump_json().encode("utf-8") + b"\n")
 

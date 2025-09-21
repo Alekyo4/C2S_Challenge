@@ -3,8 +3,8 @@ from sqlalchemy.orm import Session, sessionmaker
 
 from c2s_challenge.common.setting import SettingProvider
 
-from .abstract import DatabaseProvider
 from .orm import BaseORM
+from .provider import DatabaseProvider
 
 
 class Database(DatabaseProvider):

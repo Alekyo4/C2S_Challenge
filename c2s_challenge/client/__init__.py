@@ -1,7 +1,7 @@
 from c2s_challenge.client.agent import VehicleAgent
 from c2s_challenge.common.setting import Setting, SettingProvider
 
-from .abstract import AsyncClientProvider, SyncClientProvider
+from .provider import AsyncClientProvider, SyncClientProvider
 
 
 def make_client_sync(setting: SettingProvider | None = None) -> SyncClientProvider:

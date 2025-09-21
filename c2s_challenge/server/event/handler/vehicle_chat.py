@@ -7,7 +7,7 @@ from c2s_challenge.common.protocol.dto import (
 from c2s_challenge.server.agent import AgentAIProvider
 from c2s_challenge.server.agent.model import LLMResponse
 
-from ..abstract import EventHandler
+from ..provider import EventHandler
 
 
 class VehicleChatHandler(EventHandler):
