@@ -1,20 +1,14 @@
-from asyncio import StreamReader, StreamWriter, open_connection, to_thread
+from asyncio import StreamReader, StreamWriter, open_connection
 from functools import wraps
 from types import TracebackType
 from typing import Callable, Self
 
 from c2s_challenge.common.logger import Logger, get_logger
 from c2s_challenge.common.protocol import Protocol, Request, Response
-from c2s_challenge.common.protocol.dto import (
-    ChatMessageDto,
-    VehicleChatIDto,
-    VehicleChatODto,
-)
-from c2s_challenge.common.protocol.model import RequestEvent
 from c2s_challenge.common.setting import SettingProvider
 
 from .abstract import AsyncClientProvider
-from .exception import ClientResponseError, ClientWithoutContext
+from .exception import ClientWithoutContext
 
 
 class AsyncClient(AsyncClientProvider):
@@ -63,7 +57,7 @@ class AsyncClient(AsyncClientProvider):
         return wrapper
 
     @__require_connection
-    async def __send_request(self, request: Request) -> Response:
+    async def send_request(self, request: Request) -> Response:
         request_raw: bytes = request.model_dump_json().encode("utf-8")
 
         self.__writer.write(request_raw + b"\n")
@@ -73,50 +67,3 @@ class AsyncClient(AsyncClientProvider):
         response_raw: bytes = await self.__reader.readuntil()
 
         return Protocol.parse_response(response_raw)
-
-    @__require_connection
-    async def __ask_vehicle_chat(self, history: list[ChatMessageDto]) -> Response:
-        dto: VehicleChatIDto = VehicleChatIDto(history=history)
-
-        request: Request = Request(event=RequestEvent.VEHICLE_CHAT, data=dto)
-
-        return await self.__send_request(request)
-
-    @__require_connection
-    async def vehicle_chat(self) -> VehicleChatODto:
-        history: list[ChatMessageDto] = []
-
-        # history.append(
-        #     ChatMessageDto(
-        #         role="user",
-        #         content="Hello, I'm looking for the perfect car.",
-        #     )
-        # )
-
-        # res_welcome: Response = await self.__ask_vehicle_chat(history)
-
-        # print(f"🤖: {res_welcome.data.content}")
-
-        while True:
-            user_prompt: str = await to_thread(input, "📤: ")
-
-            history.append(ChatMessageDto(role="user", content=user_prompt))
-
-            response: Response = await self.__ask_vehicle_chat(history)
-
-            if response.status != "success":
-                raise ClientResponseError(response)
-
-            result: VehicleChatODto = response.data
-
-            if result.type == "filter":
-                return result
-
-            history.append(ChatMessageDto(role="assistant", content=result.content))
-
-            print(f"🤖: {result.content}")
-
-    async def start(self) -> None:
-        vehicle_chat: VehicleChatODto = await self.vehicle_chat()
-
-        print(vehicle_chat)

@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from types import TracebackType
 from typing import Self
 
+from c2s_challenge.common.protocol.model import Request, Response
 from c2s_challenge.common.setting import SettingProvider
 
 
@@ -30,7 +31,7 @@ class AsyncClientProvider(ClientProvider):
         raise NotImplementedError()
 
     @abstractmethod
-    async def start(self) -> None:
+    async def send_request(self, request: Request) -> Response:
         raise NotImplementedError()
 
 
@@ -49,5 +50,5 @@ class SyncClientProvider(ClientProvider):
         raise NotImplementedError()
 
     @abstractmethod
-    def start(self) -> None:
+    def send_request(self, request: Request) -> Response:
         raise NotImplementedError()

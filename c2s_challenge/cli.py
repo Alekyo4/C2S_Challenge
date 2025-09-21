@@ -2,7 +2,11 @@ from asyncio import run as asyncio
 
 from typer import Typer
 
-from c2s_challenge.client import make_client_async
+# > Client
+from c2s_challenge.client import make_client_async, make_vehicle_agent
+from c2s_challenge.client.agent import VehicleAgent
+
+# > Server
 from c2s_challenge.server import make_server_async
 
 cli: Typer = Typer()
@@ -21,7 +25,9 @@ def server() -> None:
 def client() -> None:
     async def run_client_async() -> None:
         async with make_client_async() as cl:
-            await cl.start()
+            agent: VehicleAgent = await make_vehicle_agent(client=cl)
+
+            await agent.search_interactive()
 
     asyncio(run_client_async())
 
