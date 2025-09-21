@@ -4,7 +4,7 @@ from c2s_challenge.common.setting import Setting, SettingProvider
 
 from .event import EventRouterProvider, EventRouter
 
-from .event.handler import VehicleSearchHandler, VehicleSearchChatHandler
+from .event.handler import VehicleSearchHandler, VehicleChatHandler
 
 from .agent import AgentAIProvider, GeminiAgentAI
 
@@ -42,12 +42,11 @@ def make_server_async(
   vehicle_search_handler: VehicleSearchHandler = VehicleSearchHandler(
     repository=vehicle_repository)
   
-  vehicle_search_chat_handler: VehicleSearchChatHandler = VehicleSearchChatHandler(
-    agent_ai=agent_ai)
+  vehicle_chat_handler: VehicleChatHandler = VehicleChatHandler(agent_ai=agent_ai)
   
   router: EventRouterProvider = EventRouter(handlers={
     RequestEvent.VEHICLE_SEARCH: vehicle_search_handler,
-    RequestEvent.VEHICLE_SEARCH_CHAT:  vehicle_search_chat_handler
+    RequestEvent.VEHICLE_CHAT:  vehicle_chat_handler
   })
 
   return AsyncServer(setting=setting, router=router)

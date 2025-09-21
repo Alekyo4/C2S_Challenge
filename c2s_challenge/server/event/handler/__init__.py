@@ -1,3 +1,3 @@
 from .vehicle_search import VehicleSearchHandler
 
-from .vehicle_search_chat import VehicleSearchChatHandler
+from .vehicle_chat import VehicleChatHandler

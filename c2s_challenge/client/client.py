@@ -12,11 +12,11 @@ from c2s_challenge.common.protocol import Protocol, Request, Response
 
 from c2s_challenge.common.protocol.model import RequestEvent
 
-from c2s_challenge.common.protocol.dto import VehicleSearchChatIDto, VehicleSearchChatODto, ChatMessageDto
+from c2s_challenge.common.protocol.dto import VehicleChatIDto, VehicleChatODto, ChatMessageDto
 
 from c2s_challenge.common.logger import Logger, get_logger
 
-from .exception import ClientWithoutContext
+from .exception import ClientWithoutContext, ClientResponseError
 
 from .abstract import AsyncClientProvider
 
@@ -78,30 +78,33 @@ class AsyncClient(AsyncClientProvider):
     return Protocol.parse_response(response_raw)
   
   @__require_connection
-  async def vehicle_search_chat(self, history: list[ChatMessageDto]) -> Response:
-    dto: VehicleSearchChatIDto = VehicleSearchChatIDto(history=history)
+  async def vehicle_chat(self, history: list[ChatMessageDto]) -> Response:
+    dto: VehicleChatIDto = VehicleChatIDto(history=history)
 
-    request: Request = Request(event=RequestEvent.VEHICLE_SEARCH_CHAT, data=dto)
+    request: Request = Request(event=RequestEvent.VEHICLE_CHAT, data=dto)
 
     return await self.__send_request(request)
   
   async def start(self) -> None:
-    print("🤖 Olá! Sou seu assistente automotivo. Como posso ajudar a encontrar seu próximo carro?")
+    print("🤖: Olá! Sou seu assistente automotivo. Como posso ajudar a encontrar seu próximo carro?\n")
 
     history: list[ChatMessageDto] = []
 
     while True:
-      prompt: str = await to_thread(input, "📤 Send: ")
+      prompt: str = await to_thread(input, "📤: ")
 
       history.append(ChatMessageDto(role="user", content=prompt))
 
-      response: Response = await self.vehicle_search_chat(history)
+      response: Response = await self.vehicle_chat(history)
 
       if response.status != "success":
-        return
+        raise ClientResponseError(response)
 
-      result: VehicleSearchChatODto = response.data
+      result: VehicleChatODto = response.data
+
+      if result.finished:
+        break
 
       history.append(ChatMessageDto(role="assistant", content=result.content))
 
-      print(result)
+      print(f"🤖: {result.content}")

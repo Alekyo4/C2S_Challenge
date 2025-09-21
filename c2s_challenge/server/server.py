@@ -8,6 +8,8 @@ from types import TracebackType
 
 from typing import Self
 
+from c2s_challenge.common.logger import Logger, get_logger
+
 from c2s_challenge.common.protocol import Protocol, Request, Response
 
 from c2s_challenge.common.protocol.exception import ProtocolRequestInvalid, ProtocolNotFoundEvent
@@ -23,6 +25,8 @@ from .abstract import AsyncServerProvider
 class AsyncServer(AsyncServerProvider):
   io: AsyncIoServer
   
+  logger: Logger = get_logger("Server")
+
   def __init__(self, setting: SettingProvider, router: EventRouterProvider):
     super().__init__(setting=setting, router=router)
   
@@ -59,8 +63,10 @@ class AsyncServer(AsyncServerProvider):
           response: Response = await self.router.route(request)
         except (ProtocolRequestInvalid, ProtocolNotFoundEvent) as e:
           response: Response = Response(status="error", data=str(e))
-        except Exception:
+        except Exception as e:
           response: Response = Response(status="error", data="An internal server error occurred")
+
+          self.logger.warning("Response sent with error", e)
 
         writer.write(response.model_dump_json().encode("utf-8") + b"\n")
 

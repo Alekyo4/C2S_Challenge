@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from typing import Literal, List
+from typing import Literal, Optional, Union, List, Dict, Any
 
 from pydantic import BaseModel, Field
 
@@ -14,17 +14,21 @@ class ChatMessageDto(BaseModel):
   def __str__(self) -> str:
     return self.content
 
+class VehicleFilterDto(BaseModel):
+  make: Optional[str]
+
+  model: Optional[str]
+
 class VehicleSearchIDto(BaseModel):
-  make: str = Field(min_length=1, max_length=50)
-
-  model: str = Field(min_length=1, max_length=50)
-
-class VehicleSearchChatIDto(BaseModel):
-  history: List[ChatMessageDto]
+  filter: VehicleFilterDto
 
 class VehicleSearchODto(BaseModel):
   pass
 
-class VehicleSearchChatODto(BaseModel):
+class VehicleChatIDto(BaseModel):
+  history: List[ChatMessageDto]
+
+class VehicleChatODto(BaseModel):
   finished: bool
-  content: str
+
+  content: Union[Dict[str, Any] | str]

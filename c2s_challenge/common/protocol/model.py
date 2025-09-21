@@ -7,13 +7,13 @@ from enum import Enum as PyEnum
 from .dto import (
   VehicleSearchIDto,
   VehicleSearchODto,
-  VehicleSearchChatIDto,
-  VehicleSearchChatODto)
+  VehicleChatIDto,
+  VehicleChatODto)
 
 class RequestEvent(PyEnum):
   VEHICLE_SEARCH = ("vehicle-search", VehicleSearchIDto)
 
-  VEHICLE_SEARCH_CHAT = ("vehicle-search-chat", VehicleSearchChatIDto)
+  VEHICLE_CHAT = ("vehicle-search-chat", VehicleChatIDto)
 
   def __init__(self, name: str, dto: type[BaseModel]):
     self.evt_name = name
@@ -22,7 +22,7 @@ class RequestEvent(PyEnum):
 class Request(BaseModel):
   event: RequestEvent
 
-  data: Union[VehicleSearchIDto, VehicleSearchChatIDto]
+  data: Union[VehicleSearchIDto, VehicleChatIDto]
 
   @field_serializer("event")
   def serialize_event(self, event: RequestEvent) -> str:
@@ -31,4 +31,4 @@ class Request(BaseModel):
 class Response(BaseModel):
   status: Literal["success", "error"]
 
-  data: Union[VehicleSearchODto, VehicleSearchChatODto, str]
+  data: Union[VehicleSearchODto, VehicleChatODto, str]
