@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Dict, List, Literal, Optional, Union
+from typing import List, Literal, Optional, Union
 
 from pydantic import BaseModel, Field
 
@@ -34,6 +34,6 @@ class VehicleChatIDto(BaseModel):
 
 
 class VehicleChatODto(BaseModel):
-    finished: bool
+    type: Literal["text", "filter"]
 
-    content: Union[Dict[str, Any] | str]
+    content: Union[VehicleFilterDto, str]

@@ -29,17 +29,17 @@ class VehicleChatHandler(EventHandler):
 
         if not res_chat.is_tool_call:
             result: VehicleChatODto = VehicleChatODto(
-                finished=False, content=res_chat.text
+                type="text", content=res_chat.text
             )
 
             return Response(status="success", data=result)
 
         res_extract: LLMResponse = await self.agent_ai.extract_structured(
-            data.history, VehicleFilterDto
+            history=data.history, schema=VehicleFilterDto
         )
 
         result: VehicleChatODto = VehicleChatODto(
-            finished=True, content=res_extract.tool_arguments
+            type="filter", content=res_extract.tool_arguments
         )
 
         return Response(status="success", data=result)

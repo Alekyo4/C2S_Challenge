@@ -75,35 +75,48 @@ class AsyncClient(AsyncClientProvider):
         return Protocol.parse_response(response_raw)
 
     @__require_connection
-    async def vehicle_chat(self, history: list[ChatMessageDto]) -> Response:
+    async def __ask_vehicle_chat(self, history: list[ChatMessageDto]) -> Response:
         dto: VehicleChatIDto = VehicleChatIDto(history=history)
 
         request: Request = Request(event=RequestEvent.VEHICLE_CHAT, data=dto)
 
         return await self.__send_request(request)
 
-    async def start(self) -> None:
-        print(
-            "🤖: Olá! Sou seu assistente automotivo. Como posso ajudar a encontrar seu próximo carro?\n"
-        )
-
+    @__require_connection
+    async def vehicle_chat(self) -> VehicleChatODto:
         history: list[ChatMessageDto] = []
 
+        # history.append(
+        #     ChatMessageDto(
+        #         role="user",
+        #         content="Hello, I'm looking for the perfect car.",
+        #     )
+        # )
+
+        # res_welcome: Response = await self.__ask_vehicle_chat(history)
+
+        # print(f"🤖: {res_welcome.data.content}")
+
         while True:
-            prompt: str = await to_thread(input, "📤: ")
+            user_prompt: str = await to_thread(input, "📤: ")
 
-            history.append(ChatMessageDto(role="user", content=prompt))
+            history.append(ChatMessageDto(role="user", content=user_prompt))
 
-            response: Response = await self.vehicle_chat(history)
+            response: Response = await self.__ask_vehicle_chat(history)
 
             if response.status != "success":
                 raise ClientResponseError(response)
 
             result: VehicleChatODto = response.data
 
-            if result.finished:
-                break
+            if result.type == "filter":
+                return result
 
             history.append(ChatMessageDto(role="assistant", content=result.content))
 
             print(f"🤖: {result.content}")
+
+    async def start(self) -> None:
+        vehicle_chat: VehicleChatODto = await self.vehicle_chat()
+
+        print(vehicle_chat)

@@ -75,6 +75,4 @@ class GeminiAgentAI(AgentAIProvider):
 
         validate: BaseModel = schema.model_validate_json(response.text)
 
-        return LLMResponse(
-            tool_arguments=validate.model_dump(exclude_none=True), is_tool_call=True
-        )
+        return LLMResponse(tool_arguments=validate.model_dump(), is_tool_call=True)
