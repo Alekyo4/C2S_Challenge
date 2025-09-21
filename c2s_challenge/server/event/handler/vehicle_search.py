@@ -1,7 +1,5 @@
 from c2s_challenge.common.protocol import Response
-
 from c2s_challenge.common.protocol.dto import VehicleSearchIDto, VehicleSearchODto
-
 from c2s_challenge.server.database import VehicleRepository
 
 from ..abstract import EventHandler

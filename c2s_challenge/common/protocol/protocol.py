@@ -1,14 +1,14 @@
-from pydantic import ValidationError, BaseModel
+from json import JSONDecodeError
+from json import loads as loads_json
 
-from json import JSONDecodeError, loads as loads_json
+from pydantic import BaseModel, ValidationError
 
 from .exception import (
     ProtocolNotFoundEvent,
-    ProtocolResponseInvalid,
     ProtocolRequestInvalid,
+    ProtocolResponseInvalid,
 )
-
-from .model import RequestEvent, Request, Response
+from .model import Request, RequestEvent, Response
 
 
 class Protocol:

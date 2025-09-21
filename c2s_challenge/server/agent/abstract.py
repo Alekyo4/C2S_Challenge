@@ -3,7 +3,6 @@ from abc import ABC, abstractmethod
 from pydantic import BaseModel
 
 from c2s_challenge.common.protocol.dto import ChatMessageDto
-
 from c2s_challenge.common.setting import SettingProvider
 
 from .model import LLMResponse

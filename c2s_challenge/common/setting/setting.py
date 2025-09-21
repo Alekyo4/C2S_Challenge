@@ -1,7 +1,6 @@
 from dotenv import dotenv_values
 
 from .abstract import SettingProvider
-
 from .exception import SettingNotFound
 
 

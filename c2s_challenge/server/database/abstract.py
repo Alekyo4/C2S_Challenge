@@ -1,12 +1,9 @@
 from abc import ABC, abstractmethod
-
 from contextlib import contextmanager
-
-from sqlalchemy.orm import Session
+from urllib.parse import urlparse
 
 from pydantic import BaseModel
-
-from urllib.parse import urlparse
+from sqlalchemy.orm import Session
 
 from c2s_challenge.common.setting import SettingProvider
 

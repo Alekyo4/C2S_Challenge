@@ -1,7 +1,5 @@
 from abc import ABC, abstractmethod
-
 from types import TracebackType
-
 from typing import Self
 
 from c2s_challenge.common.setting import SettingProvider

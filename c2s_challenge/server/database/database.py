@@ -1,12 +1,10 @@
-from sqlalchemy import create_engine, Engine
-
+from sqlalchemy import Engine, create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
 from c2s_challenge.common.setting import SettingProvider
 
-from .orm import BaseORM
-
 from .abstract import DatabaseProvider
+from .orm import BaseORM
 
 
 class Database(DatabaseProvider):

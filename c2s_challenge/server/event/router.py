@@ -1,8 +1,7 @@
 from c2s_challenge.common.protocol import Request, Response
-
 from c2s_challenge.common.protocol.model import RequestEvent
 
-from .abstract import EventRouterProvider, EventHandler
+from .abstract import EventHandler, EventRouterProvider
 
 
 class EventRouter(EventRouterProvider):

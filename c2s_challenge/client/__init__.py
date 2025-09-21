@@ -1,4 +1,4 @@
-from c2s_challenge.common.setting import SettingProvider, Setting
+from c2s_challenge.common.setting import Setting, SettingProvider
 
 from .abstract import AsyncClientProvider, SyncClientProvider
 

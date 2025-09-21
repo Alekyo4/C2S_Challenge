@@ -1,8 +1,7 @@
-from pydantic import BaseModel, Field
-
 from decimal import Decimal
-
 from enum import Enum as PyEnum
+
+from pydantic import BaseModel, Field
 
 
 class VehicleFuelType(PyEnum):

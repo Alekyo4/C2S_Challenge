@@ -1,10 +1,9 @@
-from pydantic import BaseModel, field_serializer
-
+from enum import Enum as PyEnum
 from typing import Literal, Union
 
-from enum import Enum as PyEnum
+from pydantic import BaseModel, field_serializer
 
-from .dto import VehicleSearchIDto, VehicleSearchODto, VehicleChatIDto, VehicleChatODto
+from .dto import VehicleChatIDto, VehicleChatODto, VehicleSearchIDto, VehicleSearchODto
 
 
 class RequestEvent(PyEnum):

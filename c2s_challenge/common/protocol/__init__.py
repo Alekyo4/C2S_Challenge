@@ -1,3 +1,4 @@
+from .model import Request, Response
 from .protocol import Protocol
 
-from .model import Request, Response
+__all__: list[str] = ["Request", "Response", "Protocol"]

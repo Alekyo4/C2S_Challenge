@@ -1,8 +1,7 @@
 from c2s_challenge.common import Vehicle as VehicleModel
 
-from .orm import VehicleORM
-
 from .abstract import DatabaseProvider, DatabaseRepository
+from .orm import VehicleORM
 
 
 class VehicleRepository(DatabaseRepository):

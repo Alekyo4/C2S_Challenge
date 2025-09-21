@@ -1,22 +1,18 @@
-from google.generativeai import GenerativeModel, configure as genai_configure
-
+from google.ai.generativelanguage_v1beta import Part
+from google.generativeai import GenerativeModel
+from google.generativeai import configure as genai_configure
 from google.generativeai.types import (
     AsyncGenerateContentResponse,
-    GenerationConfigType,
     ContentsType,
+    GenerationConfigType,
 )
-
-from google.ai.generativelanguage_v1beta import Part
-
 from pydantic import BaseModel
 
+from c2s_challenge.common.protocol.dto import ChatMessageDto
 from c2s_challenge.common.setting import SettingProvider
 
-from c2s_challenge.common.protocol.dto import ChatMessageDto
-
-from .model import LLMResponse
-
 from .abstract import AgentAIProvider
+from .model import LLMResponse
 
 
 class GeminiAgentAI(AgentAIProvider):

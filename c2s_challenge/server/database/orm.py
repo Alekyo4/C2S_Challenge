@@ -1,17 +1,14 @@
-from sqlalchemy import DateTime, Integer, Numeric, String, Enum
-
-from sqlalchemy.sql import func
-
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
-
 from decimal import Decimal
 
+from sqlalchemy import DateTime, Enum, Integer, Numeric, String
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy.sql import func
 from ulid import ULID
 
 from c2s_challenge.common.model import (
-    VehicleTransmission,
-    VehicleFuelType,
     VehicleColor,
+    VehicleFuelType,
+    VehicleTransmission,
 )
 
 
