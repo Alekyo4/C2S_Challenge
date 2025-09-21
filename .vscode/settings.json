@@ -8,6 +8,10 @@
     "**/.ruff_cache": true,
     "**/.storage": true,
   },
+  "material-icon-theme.folders.associations": {
+    "protocol": "json",
+    "agent": "generator"
+  },
   "[python]": {
     "editor.formatOnSave": true,
     "editor.formatOnSaveMode": "file",
