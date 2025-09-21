@@ -12,7 +12,11 @@ from c2s_challenge.common.protocol import Protocol, Request, Response
 
 from c2s_challenge.common.protocol.model import RequestEvent
 
-from c2s_challenge.common.protocol.dto import VehicleChatIDto, VehicleChatODto, ChatMessageDto
+from c2s_challenge.common.protocol.dto import (
+    VehicleChatIDto,
+    VehicleChatODto,
+    ChatMessageDto,
+)
 
 from c2s_challenge.common.logger import Logger, get_logger
 
@@ -20,91 +24,94 @@ from .exception import ClientWithoutContext, ClientResponseError
 
 from .abstract import AsyncClientProvider
 
+
 class AsyncClient(AsyncClientProvider):
-  __reader: StreamReader | None = None
+    __reader: StreamReader | None = None
 
-  __writer: StreamWriter | None = None
+    __writer: StreamWriter | None = None
 
-  logger: Logger = get_logger("AsyncClient")
-  
-  def __init__(self, setting: SettingProvider):
-    super().__init__(setting=setting)
+    logger: Logger = get_logger("AsyncClient")
 
-  async def __aenter__(self) -> Self:
-    self.__reader, self.__writer = await open_connection(self.host, self.port)
+    def __init__(self, setting: SettingProvider):
+        super().__init__(setting=setting)
 
-    return self
-  
-  async def __aexit__(
-    self,
-    _exc_type: type[BaseException] | None,
-    _exc_val: BaseException | None,
-    _exc_tb: TracebackType | None,
-  ) -> None:
-    if not self.__writer:
-      return
-    
-    if self.__writer.can_write_eof():
-      self.__writer.write_eof()
+    async def __aenter__(self) -> Self:
+        self.__reader, self.__writer = await open_connection(self.host, self.port)
 
-    self.__writer.close()
-    
-    await self.__writer.wait_closed()
+        return self
 
-    self.__writer = None
-    self.__reader = None
-  
-  @staticmethod
-  def __require_connection(func: Callable):
-    @wraps(func)
-    async def wrapper(self: Self, *args: tuple, **kwargs: dict[str, any]):
-      if not self.__writer or not self.__reader:
-        raise ClientWithoutContext()
-      
-      return await func(self, *args, **kwargs)
+    async def __aexit__(
+        self,
+        _exc_type: type[BaseException] | None,
+        _exc_val: BaseException | None,
+        _exc_tb: TracebackType | None,
+    ) -> None:
+        if not self.__writer:
+            return
 
-    return wrapper
-  
-  @__require_connection
-  async def __send_request(self, request: Request) -> Response:
-    request_raw: bytes = request.model_dump_json().encode("utf-8")
-    
-    self.__writer.write(request_raw + b"\n")
+        if self.__writer.can_write_eof():
+            self.__writer.write_eof()
 
-    await self.__writer.drain()
-    
-    response_raw: bytes = await self.__reader.readuntil()
+        self.__writer.close()
 
-    return Protocol.parse_response(response_raw)
-  
-  @__require_connection
-  async def vehicle_chat(self, history: list[ChatMessageDto]) -> Response:
-    dto: VehicleChatIDto = VehicleChatIDto(history=history)
+        await self.__writer.wait_closed()
 
-    request: Request = Request(event=RequestEvent.VEHICLE_CHAT, data=dto)
+        self.__writer = None
+        self.__reader = None
 
-    return await self.__send_request(request)
-  
-  async def start(self) -> None:
-    print("🤖: Olá! Sou seu assistente automotivo. Como posso ajudar a encontrar seu próximo carro?\n")
+    @staticmethod
+    def __require_connection(func: Callable):
+        @wraps(func)
+        async def wrapper(self: Self, *args: tuple, **kwargs: dict[str, any]):
+            if not self.__writer or not self.__reader:
+                raise ClientWithoutContext()
 
-    history: list[ChatMessageDto] = []
+            return await func(self, *args, **kwargs)
 
-    while True:
-      prompt: str = await to_thread(input, "📤: ")
+        return wrapper
 
-      history.append(ChatMessageDto(role="user", content=prompt))
+    @__require_connection
+    async def __send_request(self, request: Request) -> Response:
+        request_raw: bytes = request.model_dump_json().encode("utf-8")
 
-      response: Response = await self.vehicle_chat(history)
+        self.__writer.write(request_raw + b"\n")
 
-      if response.status != "success":
-        raise ClientResponseError(response)
+        await self.__writer.drain()
 
-      result: VehicleChatODto = response.data
+        response_raw: bytes = await self.__reader.readuntil()
 
-      if result.finished:
-        break
+        return Protocol.parse_response(response_raw)
 
-      history.append(ChatMessageDto(role="assistant", content=result.content))
+    @__require_connection
+    async def vehicle_chat(self, history: list[ChatMessageDto]) -> Response:
+        dto: VehicleChatIDto = VehicleChatIDto(history=history)
 
-      print(f"🤖: {result.content}")
+        request: Request = Request(event=RequestEvent.VEHICLE_CHAT, data=dto)
+
+        return await self.__send_request(request)
+
+    async def start(self) -> None:
+        print(
+            "🤖: Olá! Sou seu assistente automotivo. Como posso ajudar a encontrar seu próximo carro?\n"
+        )
+
+        history: list[ChatMessageDto] = []
+
+        while True:
+            prompt: str = await to_thread(input, "📤: ")
+
+            history.append(ChatMessageDto(role="user", content=prompt))
+
+            response: Response = await self.vehicle_chat(history)
+
+            if response.status != "success":
+                raise ClientResponseError(response)
+
+            result: VehicleChatODto = response.data
+
+            if result.finished:
+                break
+
+            history.append(ChatMessageDto(role="assistant", content=result.content))
+
+            print(f"🤖: {result.content}")

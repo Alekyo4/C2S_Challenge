@@ -4,19 +4,20 @@ from .orm import VehicleORM
 
 from .abstract import DatabaseProvider, DatabaseRepository
 
+
 class VehicleRepository(DatabaseRepository):
-  db: DatabaseProvider
+    db: DatabaseProvider
 
-  def __init__(self, database: DatabaseProvider):
-    self.db = database
+    def __init__(self, database: DatabaseProvider):
+        self.db = database
 
-  def add(self, vehicle: VehicleModel) -> VehicleModel:
-    orm: VehicleORM = VehicleORM(**vehicle.model_dump(exclude_none=True))
+    def add(self, vehicle: VehicleModel) -> VehicleModel:
+        orm: VehicleORM = VehicleORM(**vehicle.model_dump(exclude_none=True))
 
-    with self.db.get_session() as ses:
-      ses.add(orm)
-      ses.commit()
+        with self.db.get_session() as ses:
+            ses.add(orm)
+            ses.commit()
 
-      ses.refresh(orm)
+            ses.refresh(orm)
 
-    return VehicleModel.model_validate(orm)
+        return VehicleModel.model_validate(orm)

@@ -1,34 +1,39 @@
 from datetime import datetime
-
-from typing import Literal, Optional, Union, List, Dict, Any
+from typing import Any, Dict, List, Literal, Optional, Union
 
 from pydantic import BaseModel, Field
 
+
 class ChatMessageDto(BaseModel):
-  role: Literal["user", "assistant"]
+    role: Literal["user", "assistant"]
 
-  date: datetime = Field(default_factory=datetime.now)
+    date: datetime = Field(default_factory=datetime.now)
 
-  content: str
+    content: str
 
-  def __str__(self) -> str:
-    return self.content
+    def __str__(self) -> str:
+        return self.content
+
 
 class VehicleFilterDto(BaseModel):
-  make: Optional[str]
+    make: Optional[str]
 
-  model: Optional[str]
+    model: Optional[str]
+
 
 class VehicleSearchIDto(BaseModel):
-  filter: VehicleFilterDto
+    filter: VehicleFilterDto
+
 
 class VehicleSearchODto(BaseModel):
-  pass
+    pass
+
 
 class VehicleChatIDto(BaseModel):
-  history: List[ChatMessageDto]
+    history: List[ChatMessageDto]
+
 
 class VehicleChatODto(BaseModel):
-  finished: bool
+    finished: bool
 
-  content: Union[Dict[str, Any] | str]
+    content: Union[Dict[str, Any] | str]

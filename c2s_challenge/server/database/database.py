@@ -8,23 +8,23 @@ from .orm import BaseORM
 
 from .abstract import DatabaseProvider
 
+
 class Database(DatabaseProvider):
-  engine: Engine
-  
-  session_factory: sessionmaker[Session]
-  
-  def __init__(self, setting: SettingProvider) -> None:
-    super().__init__(setting)
+    engine: Engine
 
-    self.engine = create_engine(self.db_url, echo=setting.is_dev())
+    session_factory: sessionmaker[Session]
 
-    self.session_factory = sessionmaker(
-      bind=self.engine,
-      autoflush=False,
-      autocommit=False)
-    
-    if setting.is_dev():
-      BaseORM.metadata.create_all(self.engine)
+    def __init__(self, setting: SettingProvider) -> None:
+        super().__init__(setting)
 
-  def get_session(self) -> Session:
-    return self.session_factory()
+        self.engine = create_engine(self.db_url, echo=setting.is_dev())
+
+        self.session_factory = sessionmaker(
+            bind=self.engine, autoflush=False, autocommit=False
+        )
+
+        if setting.is_dev():
+            BaseORM.metadata.create_all(self.engine)
+
+    def get_session(self) -> Session:
+        return self.session_factory()

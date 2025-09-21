@@ -1,27 +1,28 @@
 from logging import StreamHandler, Formatter, Logger, getLogger, DEBUG
 
+
 def get_logger(name: str) -> Logger:
-  if not name.isascii():
-    raise TypeError(f"The name '{name}' is not accepted for logger prefix")
+    if not name.isascii():
+        raise TypeError(f"The name '{name}' is not accepted for logger prefix")
 
-  logger: Logger = getLogger(name)
-  
-  logger.setLevel(DEBUG)
+    logger: Logger = getLogger(name)
 
-  if logger.hasHandlers():
+    logger.setLevel(DEBUG)
+
+    if logger.hasHandlers():
+        return logger
+
+    handler: StreamHandler = StreamHandler()
+
+    handler.setLevel(DEBUG)
+
+    formatter: Formatter = Formatter(
+        "%(asctime)s [%(levelname)s] %(name)s: %(message)s",
+        "%Y-%m-%d %H:%M:%S",
+    )
+
+    handler.setFormatter(formatter)
+
+    logger.addHandler(handler)
+
     return logger
-  
-  handler: StreamHandler = StreamHandler()
-
-  handler.setLevel(DEBUG)
-
-  formatter: Formatter = Formatter(
-    "%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-    "%Y-%m-%d %H:%M:%S",
-  )
-
-  handler.setFormatter(formatter)
-
-  logger.addHandler(handler)
-
-  return logger

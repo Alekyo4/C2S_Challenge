@@ -1,8 +1,9 @@
 from asyncio import (
-  Server as AsyncIoServer,
-  StreamReader,
-  StreamWriter,
-  start_server as async_server)
+    Server as AsyncIoServer,
+    StreamReader,
+    StreamWriter,
+    start_server as async_server,
+)
 
 from types import TracebackType
 
@@ -12,7 +13,10 @@ from c2s_challenge.common.logger import Logger, get_logger
 
 from c2s_challenge.common.protocol import Protocol, Request, Response
 
-from c2s_challenge.common.protocol.exception import ProtocolRequestInvalid, ProtocolNotFoundEvent
+from c2s_challenge.common.protocol.exception import (
+    ProtocolRequestInvalid,
+    ProtocolNotFoundEvent,
+)
 
 from c2s_challenge.common.setting import SettingProvider
 
@@ -22,63 +26,65 @@ from .exception import ServerWithoutContext
 
 from .abstract import AsyncServerProvider
 
+
 class AsyncServer(AsyncServerProvider):
-  io: AsyncIoServer
-  
-  logger: Logger = get_logger("Server")
+    io: AsyncIoServer
 
-  def __init__(self, setting: SettingProvider, router: EventRouterProvider):
-    super().__init__(setting=setting, router=router)
-  
-  async def __aenter__(self) -> Self:
-    self.io = await async_server(
-      self.__handle_request, self.host, self.port)
+    logger: Logger = get_logger("Server")
 
-    return self
-  
-  async def __aexit__(
-      self,
-      _exc_type: type[BaseException] | None,
-      _exc_val: BaseException | None,
-      _exc_tb: TracebackType | None,
+    def __init__(self, setting: SettingProvider, router: EventRouterProvider):
+        super().__init__(setting=setting, router=router)
+
+    async def __aenter__(self) -> Self:
+        self.io = await async_server(self.__handle_request, self.host, self.port)
+
+        return self
+
+    async def __aexit__(
+        self,
+        _exc_type: type[BaseException] | None,
+        _exc_val: BaseException | None,
+        _exc_tb: TracebackType | None,
     ) -> None:
-    if not self.io:
-      return
-    
-    self.io.close()
-    
-    await self.io.wait_closed()
-  
-  async def __handle_request(self, reader: StreamReader, writer: StreamWriter):
-    try:
-      while True:
+        if not self.io:
+            return
+
+        self.io.close()
+
+        await self.io.wait_closed()
+
+    async def __handle_request(self, reader: StreamReader, writer: StreamWriter):
         try:
-          raw: bytes = await reader.readline()
+            while True:
+                try:
+                    raw: bytes = await reader.readline()
 
-          if not raw:
-            break
+                    if not raw:
+                        break
 
-          request: Request = Protocol.parse_request(raw)
+                    request: Request = Protocol.parse_request(raw)
 
-          response: Response = await self.router.route(request)
-        except (ProtocolRequestInvalid, ProtocolNotFoundEvent) as e:
-          response: Response = Response(status="error", data=str(e))
-        except Exception as e:
-          response: Response = Response(status="error", data="An internal server error occurred")
+                    response: Response = await self.router.route(request)
+                except (ProtocolRequestInvalid, ProtocolNotFoundEvent) as e:
+                    response: Response = Response(status="error", data=str(e))
+                except Exception as e:
+                    response: Response = Response(
+                        status="error", data="An internal server error occurred"
+                    )
 
-          self.logger.warning("Response sent with error", e)
+                    self.logger.warning("Response sent with error", e)
 
-        writer.write(response.model_dump_json().encode("utf-8") + b"\n")
+                writer.write(response.model_dump_json().encode("utf-8") + b"\n")
 
-        await writer.drain()
-    finally:
-      writer.close()
-      
-      await writer.wait_closed()
-  
-  async def listen(self) -> None:
-    if not self.io:
-      raise ServerWithoutContext()
-    
-    async with self.io:
-      await self.io.serve_forever()
+                await writer.drain()
+        finally:
+            writer.close()
+
+            await writer.wait_closed()
+
+    async def listen(self) -> None:
+        if not self.io:
+            raise ServerWithoutContext()
+
+        async with self.io:
+            await self.io.serve_forever()
