@@ -22,7 +22,7 @@
         "icon": "bell-dot",
         "color": "terminal.ansiGreen",
         "commands": [
-          "sleep 2",
+          "sleep 3",
           "uv run c2s client"
         ]
       }

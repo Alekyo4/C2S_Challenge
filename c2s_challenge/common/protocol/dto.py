@@ -80,45 +80,45 @@ class ChatMessageDto(BaseModel):
 
 
 class VehicleFilterDto(BaseModel):
-    make: Optional[str] = None
+    make: Optional[str]
 
-    model: Optional[str] = None
+    model: Optional[str]
 
-    vin: Optional[str] = None
+    vin: Optional[str]
 
-    engine: Optional[str] = None
+    engine: Optional[str]
 
-    fuel_type: Optional[VehicleFuelType] = None
+    fuel_type: Optional[VehicleFuelType]
 
-    transmission: Optional[VehicleTransmission] = None
+    transmission: Optional[VehicleTransmission]
 
-    color: Optional[VehicleColor] = None
+    color: Optional[VehicleColor]
 
-    color_detail: Optional[str] = None
+    color_detail: Optional[str]
 
-    price: Optional[float] = None
+    price: Optional[float]
 
-    min_price: Optional[Decimal] = None
+    min_price: Optional[float]
 
-    max_price: Optional[Decimal] = None
+    max_price: Optional[float]
 
-    doors: Optional[int] = None
+    doors: Optional[int]
 
-    min_doors: Optional[int] = None
+    min_doors: Optional[int]
 
-    max_doors: Optional[int] = None
+    max_doors: Optional[int]
 
-    mileage: Optional[int] = None
+    mileage: Optional[int]
 
-    min_mileage: Optional[int] = None
+    min_mileage: Optional[int]
 
-    max_mileage: Optional[int] = None
+    max_mileage: Optional[int]
 
-    year: Optional[int] = None
+    year: Optional[int]
 
-    min_year: Optional[int] = None
+    min_year: Optional[int]
 
-    max_year: Optional[int] = None
+    max_year: Optional[int]
 
 
 class VehicleSearchIDto(BaseModel):

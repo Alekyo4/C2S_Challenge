@@ -1,5 +1,7 @@
 from asyncio import to_thread
 
+from tabulate import tabulate
+
 from c2s_challenge.common.protocol.dto import (
     ChatMessageDto,
     VehicleChatIDto,
@@ -44,7 +46,7 @@ class VehicleAgent:
 
             vehicle_search: VehicleSearchODto = await self.search(vehicle_filter)
 
-            self.__display_vehicles(vehicle_search.result)
+            await self.__display_vehicles(vehicle_search.result)
 
     async def __filter_interactive(self) -> VehicleFilterDto:
         history: list[ChatMessageDto] = [
@@ -56,10 +58,10 @@ class VehicleAgent:
 
         chat_welcome: VehicleChatODto = await self.chat(history)
 
-        print(f"🤖: {chat_welcome.content}")
+        print(f"\033[92m🤖: {chat_welcome.content}")
 
         while True:
-            user_prompt: str = await to_thread(input, "📤: ")
+            user_prompt: str = await to_thread(input, "\033[92m📤: ")
 
             history.append(ChatMessageDto(role="user", content=user_prompt))
 
@@ -72,7 +74,34 @@ class VehicleAgent:
                 ChatMessageDto(role="assistant", content=chat_response.content)
             )
 
-            print(f"🤖: {chat_response.content}")
+            print(f"\033[92m🤖: {chat_response.content}")
 
     async def __display_vehicles(self, vehicles: list[VehicleDto]) -> None:
-        print(vehicles)
+        headers: list[str] = [
+            "Vin",
+            "Make",
+            "Model",
+            "Fuel Type",
+            "Color",
+            "Year",
+            "Price",
+        ]
+
+        table_data: list[list[str]] = []
+
+        for vehicle in vehicles:
+            table_data.append(
+                [
+                    vehicle.vin,
+                    vehicle.make.capitalize(),
+                    vehicle.model.capitalize(),
+                    vehicle.fuel_type,
+                    vehicle.color,
+                    vehicle.year,
+                    vehicle.price,
+                ]
+            )
+
+        table: str = tabulate(table_data, headers=headers, tablefmt="outline")
+
+        print(f"\033[92m{table}\n")

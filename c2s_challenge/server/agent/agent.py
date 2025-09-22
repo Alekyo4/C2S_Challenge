@@ -1,3 +1,5 @@
+from json import loads as json_loads
+
 from google.ai.generativelanguage_v1beta import Part
 from google.generativeai import GenerativeModel
 from google.generativeai import configure as genai_configure
@@ -73,6 +75,10 @@ class GeminiAgentAI(AgentAIProvider):
             )
         )
 
-        validate: BaseModel = schema.model_validate_json(response.text)
+        res_model: dict[str, any] = json_loads(response.text)
 
-        return LLMResponse(tool_arguments=validate.model_dump(), is_tool_call=True)
+        res_model = {field: res_model.get(field, None) for field in schema.model_fields}
+
+        validate: BaseModel = schema.model_construct(**res_model)
+
+        return LLMResponse(tool_arguments=validate, is_tool_call=True)
