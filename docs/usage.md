@@ -119,3 +119,4 @@ The `pyproject.toml` defines several useful tasks for development, which can be 
 | **Run Tests** | `test`    | Runs the test suite with `pytest`.                           |
 | **Check Linting** | `lint`    | Analyzes the code for errors and style issues with `ruff`.     |
 | **Format Code** | `format`    | Automatically formats all project code with `ruff format`.   |
+| **Populate** | `populate` | Generates fake data for the database |

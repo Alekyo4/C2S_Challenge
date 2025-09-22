@@ -1,0 +1,31 @@
+{
+  "$schema": "https://cdn.statically.io/gh/nguyenngoclongdev/cdn/main/schema/v11/terminal-keeper.json",
+  "theme": "tribe",
+  "active": "default",
+  "activateOnStartup": false,
+  "keepExistingTerminals": false,
+  "sessions": {
+    "default": [
+      {
+        "name": "Server",
+        "autoExecuteCommands": true,
+        "icon": "bell-dot",
+        "color": "terminal.ansiGreen",
+        "commands": [
+          "make up",
+          "uv run c2s server"
+        ]
+      },
+      {
+        "name": "Client",
+        "autoExecuteCommands": true,
+        "icon": "bell-dot",
+        "color": "terminal.ansiGreen",
+        "commands": [
+          "sleep 3",
+          "uv run c2s client"
+        ]
+      }
+    ]
+  }
+}

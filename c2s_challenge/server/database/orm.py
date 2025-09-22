@@ -32,14 +32,16 @@ class VehicleORM(BaseORM):
     engine: Mapped[str] = mapped_column(String(50), nullable=False)
 
     fuel_type: Mapped[VehicleFuelType] = mapped_column(
-        Enum(VehicleFuelType), nullable=False
+        Enum(VehicleFuelType, name="vehiclefueltype"), nullable=False
     )
 
     transmission: Mapped[VehicleTransmission] = mapped_column(
-        Enum(VehicleTransmission), nullable=False
+        Enum(VehicleTransmission, name="vehicletransmission"), nullable=False
     )
 
-    color: Mapped[VehicleColor] = mapped_column(Enum(VehicleColor), nullable=False)
+    color: Mapped[VehicleColor] = mapped_column(
+        Enum(VehicleColor, name="vehiclecolor"), nullable=False
+    )
 
     color_detail: Mapped[str | None] = mapped_column(String(50), nullable=True)
 

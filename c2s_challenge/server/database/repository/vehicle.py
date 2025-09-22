@@ -17,9 +17,9 @@ class VehicleRepository(DatabaseRepository):
         orm: VehicleORM = VehicleORM(**entity.model_dump(exclude_none=True))
 
         self.session.add(orm)
-        self.session.refresh(orm)
-
         self.session.flush()
+
+        self.session.refresh(orm)
 
         return VehicleDto.model_validate(orm, from_attributes=True)
 

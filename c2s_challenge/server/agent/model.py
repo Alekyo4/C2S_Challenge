@@ -1,4 +1,4 @@
-from typing import Any, Dict, Optional
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -8,6 +8,6 @@ class LLMResponse(BaseModel):
 
     tool_name: Optional[str] = None
 
-    tool_arguments: Optional[Dict[str, Any]] = None
+    tool_arguments: Optional[BaseModel] = None
 
     text: Optional[str] = None
