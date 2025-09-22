@@ -19,11 +19,13 @@ class VehicleSeeder(SeederProvider[VehicleDto]):
 
     def run(self, num: int) -> None:
         with self.database.get_session() as session:
-            for vehicle_index in range(num):
-                vehicle: VehicleDto = self.faker.create()
+            vehicles: list[VehicleDto] = [self.faker.create() for _ in range(num)]
 
-                vehicle_repo: VehicleRepository = VehicleRepository(session=session)
+            vehicle_repo: VehicleRepository = VehicleRepository(session=session)
 
+            for index, vehicle in enumerate(vehicles):
                 vehicle_repo.add(vehicle)
 
-                self.logger.debug(f"Vehicle {vehicle_index + 1} added successfully")
+                self.logger.debug(f"Vehicle {index + 1} added successfully")
+
+            session.commit()
