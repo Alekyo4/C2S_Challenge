@@ -24,6 +24,8 @@ dev = "uv run c2s_challenge"
 lint = "uvx ruff check"
 format = "uvx ruff format"
 
+populate = "python -m c2s_challenge.script.populate"
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

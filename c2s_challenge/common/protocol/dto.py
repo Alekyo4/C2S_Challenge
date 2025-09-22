@@ -7,25 +7,25 @@ from pydantic import BaseModel, Field
 
 
 class VehicleFuelType(Enum):
-    GASOLINE = "gasoline"
-    DIESEL = "diesel"
-    ELECTRIC = "electric"
-    HYBRID = "hybrid"
+    GASOLINE = "GASOLINE"
+    DIESEL = "DIESEL"
+    ELECTRIC = "ELECTRIC"
+    HYBRID = "HYBRID"
 
 
 class VehicleTransmission(Enum):
-    MANUAL = "manual"
-    AUTOMATIC = "automatic"
+    MANUAL = "MANUAL"
+    AUTOMATIC = "AUTOMATIC"
 
 
 class VehicleColor(Enum):
-    BLACK = "black"
-    WHITE = "white"
-    SILVER = "silver"
-    GRAY = "gray"
-    BLUE = "blue"
-    RED = "red"
-    OTHER = "other"
+    BLACK = "BLACK"
+    WHITE = "WHITE"
+    SILVER = "SILVER"
+    GRAY = "GRAY"
+    BLUE = "BLUE"
+    RED = "RED"
+    OTHER = "OTHER"
 
 
 class VehicleDto(BaseModel):
@@ -60,8 +60,8 @@ class VehicleDto(BaseModel):
 
     year: int = Field(ge=1900)
 
-    created_at: str | None = None
-    updated_at: str | None = None
+    created_at: datetime | None = None
+    updated_at: datetime | None = None
 
     class Config:
         use_enum_values = True
