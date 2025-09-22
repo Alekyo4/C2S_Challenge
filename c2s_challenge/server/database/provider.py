@@ -11,7 +11,7 @@ class DatabaseProvider(ABC):
     db_url: str
 
     def __init__(self, setting: SettingProvider) -> None:
-        connc: str = setting.get_required("DB_URL")
+        connc: str = setting.get_required("DATABASE_URL")
 
         self.db_url = urlparse(connc).geturl()
 
