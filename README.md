@@ -8,7 +8,7 @@ A back-end challenge project that implements an asynchronous client-server appli
 
 To set up the environment, install dependencies, and run the project, please follow our detailed guide:
 
-➡️ **[Usage and Execution Guide (docs/usage.md)](https://www.google.com/search?q=docs/usage.md)**
+➡️ **[Usage and Execution Guide (docs/usage.md)](/docs/usage.md)**
 
 -----
 
@@ -31,10 +31,10 @@ The architecture was carefully planned to be modular, testable, and scalable, ut
 
 For an in-depth understanding of the project, please refer to the following documents in the `/docs` folder:
 
-  * **🏛️ [Project Architecture (docs/architecture.md)](https://www.google.com/search?q=docs/architecture.md)**
+  * **🏛️ [Project Architecture (docs/architecture.md)](/docs/architecture.md)**
     <br>A complete explanation of the design patterns, execution flow, component diagrams, and the overall software structure.
 
-  * **🗄️ [Database Model (docs/database.md)](https://www.google.com/search?q=docs/database.md)**
+  * **🗄️ [Database Model (docs/database.md)](/docs/database.md)**
     <br>Entity-Relationship Diagram (ERD) and details about the tables and columns.
 
   * **📄 [Usage and Execution Guide (docs/usage.md)](https://www.google.com/search?q=docs/usage.md)**
