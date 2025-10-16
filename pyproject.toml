@@ -1,8 +1,14 @@
 [project]
 name = "c2s_challenge"
 version = "0.1.0"
-description = "Add your description here"
+
+authors = [{ name = "Alekyo4", email = "devalexsanderaraujo@gmail.com" }]
+
 readme = "README.md"
+description = "C2S Enterprise AI Challenge for Python SR/PL"
+
+license-files = ["LICENSE"]
+
 requires-python = ">=3.12"
 
 dependencies = [
@@ -38,8 +44,4 @@ build-backend = "hatchling.build"
 packages = ["c2s_challenge"]
 
 [dependency-groups]
-dev = [
-    "pytest>=8.4.2",
-    "pytest-asyncio>=1.2.0",
-    "taskipy>=1.14.1",
-]
+dev = ["pytest>=8.4.2", "pytest-asyncio>=1.2.0", "taskipy>=1.14.1"]
