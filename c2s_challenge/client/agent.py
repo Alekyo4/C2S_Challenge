@@ -2,6 +2,7 @@ from asyncio import to_thread
 
 from tabulate import tabulate
 
+from c2s_challenge.common.protocol.contracts import Request, RequestEvent, Response
 from c2s_challenge.common.protocol.dto import (
     ChatMessageDto,
     VehicleChatIDto,
@@ -11,7 +12,6 @@ from c2s_challenge.common.protocol.dto import (
     VehicleSearchIDto,
     VehicleSearchODto,
 )
-from c2s_challenge.common.protocol.model import Request, RequestEvent, Response
 
 from .provider import AsyncClientProvider
 

@@ -1,4 +1,4 @@
-from c2s_challenge.common.protocol.model import RequestEvent
+from c2s_challenge.common.protocol.contracts import RequestEvent
 from c2s_challenge.common.setting import Setting, SettingProvider
 
 from .aicore import GeminiLLM, LLMProvider

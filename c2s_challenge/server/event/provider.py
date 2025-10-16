@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from pydantic import BaseModel
 
 from c2s_challenge.common.protocol import Request, Response
-from c2s_challenge.common.protocol.model import RequestEvent
+from c2s_challenge.common.protocol.contracts import RequestEvent
 
 
 class EventHandler(ABC):

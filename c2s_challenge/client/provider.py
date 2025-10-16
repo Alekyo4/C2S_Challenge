@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 from types import TracebackType
 from typing import Self
 
-from c2s_challenge.common.protocol.model import Request, Response
+from c2s_challenge.common.protocol.contracts import Request, Response
 from c2s_challenge.common.setting import SettingProvider
 
 

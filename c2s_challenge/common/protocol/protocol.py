@@ -3,12 +3,12 @@ from json import loads as loads_json
 
 from pydantic import BaseModel, ValidationError
 
+from .contracts import Request, RequestEvent, Response
 from .exception import (
     ProtocolNotFoundEvent,
     ProtocolRequestInvalid,
     ProtocolResponseInvalid,
 )
-from .model import Request, RequestEvent, Response
 
 
 class Protocol:
