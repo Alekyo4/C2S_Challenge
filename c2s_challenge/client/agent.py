@@ -60,6 +60,8 @@ class VehicleAgent:
 
         print(f"\033[92m🤖: {chat_welcome.content}")
 
+        history.append(ChatMessageDto(role="assistant", content=chat_welcome.content))
+
         while True:
             user_prompt: str = await to_thread(input, "\033[92m📤: ")
 
