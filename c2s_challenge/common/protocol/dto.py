@@ -29,11 +29,6 @@ class VehicleColor(Enum):
 
 
 class VehicleDto(BaseModel):
-    """
-    Represents the business entity of a Vehicle.
-    Validates and types data robustly.
-    """
-
     id: str | None = None
 
     make: str = Field(min_length=1, max_length=50)

@@ -6,14 +6,14 @@ This document describes the necessary steps to configure the environment, instal
 
 Before you begin, ensure you have the following tools installed on your machine:
 
-* **Python 3.12+**
-* **Docker** and **Docker Compose**
-* **uv**: A Python package and virtual environment manager.
-    ```bash
-    # Installation command (may vary depending on your system)
-    pip install uv
-    ```
-* **Make**: A command automation utility (usually pre-installed on Linux/macOS systems).
+- **Python 3.12+**
+- **Docker** and **Docker Compose**
+- **uv**: A Python package and virtual environment manager.
+  ```bash
+  # Installation command (may vary depending on your system)
+  pip install uv
+  ```
+- **Make**: A command automation utility (usually pre-installed on Linux/macOS systems).
 
 ## 2. Setup
 
@@ -91,9 +91,9 @@ There are important differences in how the project is run in each environment.
 
 ### Database Creation
 
-  * **Development:** To speed up the setup process, the server is configured to automatically create all tables defined in the ORM (`Base.metadata.create_all()`) on startup if they do not exist.
+- **Development:** To speed up the setup process, the server is configured to automatically create all tables defined in the ORM (`Base.metadata.create_all()`) on startup if they do not exist.
 
-  * **Production:** Automatic table creation is **disabled** to prevent accidental data loss. In a production environment, it is **mandatory** to use Alembic to manage the database schema.
+- **Production:** Automatic table creation is **disabled** to prevent accidental data loss. In a production environment, it is **mandatory** to use Alembic to manage the database schema.
 
 **Typical Alembic Commands (for Production):**
 
@@ -114,9 +114,9 @@ make down
 
 The `pyproject.toml` defines several useful tasks for development, which can be executed with `uv run task <task_name>`.
 
-| Action          | Task Name | Description                                                  |
-|:----------------|:----------|:-------------------------------------------------------------|
-| **Run Tests** | `test`    | Runs the test suite with `pytest`.                           |
-| **Check Linting** | `lint`    | Analyzes the code for errors and style issues with `ruff`.     |
-| **Format Code** | `format`    | Automatically formats all project code with `ruff format`.   |
-| **Populate** | `populate` | Generates fake data for the database |
+| Action            | Task Name  | Description                                                |
+| :---------------- | :--------- | :--------------------------------------------------------- |
+| **Run Tests**     | `test`     | Runs the test suite with `pytest`.                         |
+| **Check Linting** | `lint`     | Analyzes the code for errors and style issues with `ruff`. |
+| **Format Code**   | `format`   | Automatically formats all project code with `ruff format`. |
+| **Populate**      | `populate` | Generates fake data for the database                       |

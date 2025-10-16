@@ -5,12 +5,10 @@ from .provider import AsyncClientProvider, SyncClientProvider
 
 
 def make_client_sync(setting: SettingProvider | None = None) -> SyncClientProvider:
-    """Factory function to create a SyncClient instance."""
     raise NotImplementedError()
 
 
 def make_client_async(setting: SettingProvider | None = None) -> AsyncClientProvider:
-    """Factory function to create a AsyncClient instance."""
     from .client import AsyncClient
 
     if setting is None:
@@ -20,5 +18,4 @@ def make_client_async(setting: SettingProvider | None = None) -> AsyncClientProv
 
 
 async def make_vehicle_agent(client: AsyncClientProvider) -> VehicleAgent:
-    """Factory function to create a VehicleAgent instance"""
     return VehicleAgent(client=client)

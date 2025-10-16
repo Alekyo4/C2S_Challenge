@@ -13,7 +13,6 @@ def make_server_sync(
     database: DatabaseProvider | None = None,
     agent_ai: AgentAIProvider | None = None,
 ) -> SyncServerProvider:
-    """Factory function to create a SyncServer instance."""
     raise NotImplementedError()
 
 
@@ -22,7 +21,6 @@ def make_server_async(
     database: DatabaseProvider | None = None,
     agent_ai: AgentAIProvider | None = None,
 ) -> AsyncServerProvider:
-    """Factory function to create a AsyncServer instance."""
     from .server import AsyncServer
 
     if setting is None:
