@@ -2,7 +2,7 @@
 
 A back-end challenge project that implements an asynchronous client-server application in Python, featuring interaction with a PostgreSQL database, Generative AI integration, and a fully containerized environment with Docker.
 
------
+---
 
 ## 🚀 Getting Started
 
@@ -10,7 +10,7 @@ To set up the environment, install dependencies, and run the project, please fol
 
 ➡️ **[Usage and Execution Guide (docs/usage.md)](/docs/usage.md)**
 
------
+---
 
 ## 📖 About the Project
 
@@ -20,25 +20,25 @@ The architecture was carefully planned to be modular, testable, and scalable, ut
 
 ### ✨ Key Features
 
-  * **Asynchronous Client-Server Communication:** Uses `asyncio` to efficiently manage multiple connections.
-  * **Data Persistence:** Integration with PostgreSQL using SQLAlchemy ORM and schema management with Alembic for production.
-  * **Generative AI Integration:** Capable of connecting to AI services (like Google Gemini) to process and respond to requests.
-  * **Containerized Environment:** Uses Docker and Docker Compose to ensure a consistent and isolated development and production environment.
+- **Asynchronous Client-Server Communication:** Uses `asyncio` to efficiently manage multiple connections.
+- **Data Persistence:** Integration with PostgreSQL using SQLAlchemy ORM and schema management with Alembic for production.
+- **Generative AI Integration:** Capable of connecting to AI services (like Google Gemini) to process and respond to requests.
+- **Containerized Environment:** Uses Docker and Docker Compose to ensure a consistent and isolated development and production environment.
 
------
+---
 
 ## 📚 Documentation
 
 For an in-depth understanding of the project, please refer to the following documents in the `/docs` folder:
 
-  * **🏛️ [Project Architecture (docs/architecture.md)](/docs/architecture.md)**
-    <br>A complete explanation of the design patterns, execution flow, component diagrams, and the overall software structure.
+- **🏛️ [Project Architecture (docs/architecture.md)](/docs/architecture.md)**
+  <br>A complete explanation of the design patterns, execution flow, component diagrams, and the overall software structure.
 
-  * **🗄️ [Database Model (docs/database.md)](/docs/database.md)**
-    <br>Entity-Relationship Diagram (ERD) and details about the tables and columns.
+- **🗄️ [Database Model (docs/database.md)](/docs/database.md)**
+  <br>Entity-Relationship Diagram (ERD) and details about the tables and columns.
 
-  * **📄 [Usage and Execution Guide (docs/usage.md)](https://www.google.com/search?q=docs/usage.md)**
-    <br>Detailed instructions on how to set up the environment, run the project, and all available development commands.
+- **📄 [Usage and Execution Guide (docs/usage.md)](/docs/usage.md)**
+  <br>Detailed instructions on how to set up the environment, run the project, and all available development commands.
 
 ## 📝 License
 
