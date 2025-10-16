@@ -3,7 +3,7 @@ from decimal import Decimal
 from enum import Enum
 from typing import List, Literal, Optional, Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class VehicleFuelType(Enum):
@@ -58,9 +58,7 @@ class VehicleDto(BaseModel):
     created_at: datetime | None = None
     updated_at: datetime | None = None
 
-    class Config:
-        use_enum_values = True
-        from_attributes = True
+    model_config = ConfigDict(use_enum_values=True, from_attributes=True)
 
 
 class ChatMessageDto(BaseModel):
@@ -119,9 +117,9 @@ class VehicleFilterDto(BaseModel):
 class VehicleSearchIDto(BaseModel):
     filter: VehicleFilterDto
 
-    offset: int = Field(0, gte=0)
+    offset: int = Field(0, ge=0)
 
-    limit: int = Field(5, gt=0, lte=100)
+    limit: int = Field(5, gt=0, le=100)
 
 
 class VehicleSearchODto(BaseModel):

@@ -1,5 +1,6 @@
 from enum import Enum
-from typing import Literal, Union
+from http import HTTPStatus
+from typing import Union
 
 from pydantic import BaseModel, field_serializer
 
@@ -27,6 +28,6 @@ class Request(BaseModel):
 
 
 class Response(BaseModel):
-    status: Literal["success", "error"]
+    status: HTTPStatus = HTTPStatus.OK
 
     data: Union[VehicleSearchODto, VehicleChatODto, str]

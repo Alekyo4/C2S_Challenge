@@ -23,6 +23,8 @@ c2s = "c2s_challenge.cli:cli"
 
 [tool.taskipy.tasks]
 dev = "uv run c2s_challenge"
+test = "uv run pytest"
+
 lint = "uvx ruff check"
 format = "uvx ruff format"
 
@@ -37,5 +39,7 @@ packages = ["c2s_challenge"]
 
 [dependency-groups]
 dev = [
+    "pytest>=8.4.2",
+    "pytest-asyncio>=1.2.0",
     "taskipy>=1.14.1",
 ]

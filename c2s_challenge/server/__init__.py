@@ -6,6 +6,7 @@ from .database import Database, DatabaseProvider
 from .event import EventRouter, EventRouterProvider
 from .event.handler import VehicleChatHandler, VehicleSearchHandler
 from .provider import AsyncServerProvider, SyncServerProvider
+from .server import AsyncServer
 
 
 def make_server_router(
@@ -43,8 +44,6 @@ def make_server_async(
     database: DatabaseProvider | None = None,
     router: EventRouterProvider | None = None,
 ) -> AsyncServerProvider:
-    from .server import AsyncServer
-
     if setting is None:
         setting = Setting()
 

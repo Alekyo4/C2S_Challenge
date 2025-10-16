@@ -8,6 +8,7 @@ from asyncio import (
 from asyncio import (
     start_server as async_server,
 )
+from http import HTTPStatus
 from types import TracebackType
 from typing import Self
 
@@ -29,7 +30,7 @@ class AsyncServer(AsyncServerProvider):
 
     logger: Logger = get_logger("Server")
 
-    def __init__(self, setting: SettingProvider, router: EventRouterProvider):
+    def __init__(self, setting: SettingProvider, router: EventRouterProvider) -> Self:
         super().__init__(setting=setting, router=router)
 
     async def __aenter__(self) -> Self:
@@ -50,26 +51,17 @@ class AsyncServer(AsyncServerProvider):
 
         await self.io.wait_closed()
 
-    async def __handle_request(self, reader: StreamReader, writer: StreamWriter):
+    async def __handle_request(
+        self, reader: StreamReader, writer: StreamWriter
+    ) -> None:
         try:
             while True:
-                try:
-                    raw: bytes = await reader.readline()
+                request_raw: bytes = await reader.readline()
 
-                    if not raw:
-                        break
+                if not request_raw:
+                    break
 
-                    request: Request = Protocol.parse_request(raw)
-
-                    response: Response = await self.router.route(request)
-                except (ProtocolRequestInvalid, ProtocolNotFoundEvent) as e:
-                    response: Response = Response(status="error", data=str(e))
-                except Exception as e:
-                    response: Response = Response(
-                        status="error", data="An internal server error occurred"
-                    )
-
-                    self.logger.warning("Response sent with error", exc_info=e)
+                response: Response = self.process_request(request_raw)
 
                 writer.write(response.model_dump_json().encode("utf-8") + b"\n")
 
@@ -78,6 +70,32 @@ class AsyncServer(AsyncServerProvider):
             writer.close()
 
             await writer.wait_closed()
+
+    async def process_request(
+        self, payload: Request | dict[str, any] | bytes
+    ) -> Response:
+        response: Response
+
+        try:
+            if not isinstance(payload, Request):
+                request: Request = Protocol.parse_request(payload)
+            else:
+                request: Request = payload
+
+            response = await self.router.route(request)
+        except ProtocolRequestInvalid as e:
+            response = Response(status=HTTPStatus.BAD_REQUEST, data=str(e))
+        except ProtocolNotFoundEvent as e:
+            response = Response(status=HTTPStatus.NOT_FOUND, data=str(e))
+        except Exception as e:
+            response = Response(
+                status=HTTPStatus.INTERNAL_SERVER_ERROR,
+                data="An internal server error occurred",
+            )
+
+            self.logger.error("Response sent with error", exc_info=e)
+        finally:
+            return response
 
     async def listen(self) -> None:
         if not self.io:

@@ -9,7 +9,6 @@ TModel = TypeVar("TModel", bound=BaseModel)
 
 
 class SeederProvider(Generic[TModel], ABC):
-    @abstractmethod
     def __init__(self, database: DatabaseProvider):
         raise NotImplementedError()
 

@@ -32,7 +32,7 @@ class VehicleChatHandler(EventHandler):
                 type="text", content=res_chat.text
             )
 
-            return Response(status="success", data=result)
+            return Response(data=result)
 
         res_extract: LLMResponse = await self.llm.extract_structured(
             history=data.history, schema=VehicleFilterDto
@@ -42,4 +42,4 @@ class VehicleChatHandler(EventHandler):
             type="filter", content=res_extract.tool_arguments
         )
 
-        return Response(status="success", data=result)
+        return Response(data=result)

@@ -9,10 +9,10 @@ class Setting(SettingProvider):
 
     __raw: dict[str, str] = {}
 
-    def __init__(self, initial: dict[str, str] = {}) -> None:
-        self.__raw = initial
-
+    def __init__(self, override: dict[str, str] = {}) -> None:
         self.__load()
+
+        self.__raw.update(override)
 
     def __load(self) -> None:
         for stage in self.envs:

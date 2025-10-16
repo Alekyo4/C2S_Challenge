@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 from types import TracebackType
 from typing import Self
 
+from c2s_challenge.common.protocol import Request, Response
 from c2s_challenge.common.setting import SettingProvider
 
 from .event import EventRouterProvider
@@ -13,7 +14,7 @@ class ServerProvider(ABC):
     host: str
     port: int
 
-    def __init__(self, setting: SettingProvider, router: EventRouterProvider):
+    def __init__(self, setting: SettingProvider, router: EventRouterProvider) -> None:
         self.host = setting.get_required("SV_HOST")
 
         self.port = int(setting.get_required("SV_PORT"))
@@ -36,6 +37,12 @@ class AsyncServerProvider(ServerProvider):
         raise NotImplementedError()
 
     @abstractmethod
+    async def process_request(
+        self, payload: Request | dict[str, any] | bytes
+    ) -> Response:
+        raise NotImplementedError()
+
+    @abstractmethod
     async def listen(self) -> None:
         raise NotImplementedError()
 
@@ -52,6 +59,10 @@ class SyncServerProvider(ServerProvider):
         exc_val: BaseException | None,
         exc_tb: TracebackType | None,
     ) -> None:
+        raise NotImplementedError()
+
+    @abstractmethod
+    def process_request(self, payload: Request | dict[str, any] | bytes) -> Response:
         raise NotImplementedError()
 
     @abstractmethod

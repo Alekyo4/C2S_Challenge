@@ -1,6 +1,9 @@
 # Project
 .storage
 
+# Pytest
+.pytest_cache
+
 # Env files
 .env
 .env.production

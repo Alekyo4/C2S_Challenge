@@ -13,11 +13,14 @@ from .exception import (
 
 class Protocol:
     @staticmethod
-    def parse_request(payload: bytes) -> Request:
+    def parse_request(payload: dict[str, any] | bytes) -> Request:
         try:
-            raw: dict[str, any] = loads_json(payload.decode("utf-8"))
+            if isinstance(payload, bytes):
+                request_raw: dict[str, any] = loads_json(payload.decode("utf-8"))
+            else:
+                request_raw: dict[str, any] = payload
 
-            event_name: str = raw.get("event")
+            event_name: str = request_raw.get("event")
 
             if not event_name:
                 raise ProtocolRequestInvalid()
@@ -29,7 +32,9 @@ class Protocol:
             if not event:
                 raise ProtocolNotFoundEvent()
 
-            validate: BaseModel = event.dto_class.model_validate(raw.get("data", {}))
+            validate: BaseModel = event.dto_class.model_validate(
+                request_raw.get("data", {})
+            )
 
             return Request(event=event, data=validate)
         except (ValidationError, JSONDecodeError, ValueError):

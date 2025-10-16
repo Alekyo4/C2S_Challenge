@@ -1,3 +1,5 @@
+from http import HTTPStatus
+
 from c2s_challenge.common.protocol import Request, Response
 from c2s_challenge.common.protocol.contracts import RequestEvent
 
@@ -13,7 +15,7 @@ class EventRouter(EventRouterProvider):
 
         if not handler:
             return Response(
-                status="error",
+                status=HTTPStatus.NOT_FOUND,
                 data=f"no route found for received event '{request.event.evt_name}'",
             )
 

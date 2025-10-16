@@ -24,4 +24,4 @@ class VehicleSearchHandler(EventHandler):
 
             result = VehicleSearchODto(total=search_total, result=search_result)
 
-        return Response(status="success", data=result)
+        return Response(data=result)

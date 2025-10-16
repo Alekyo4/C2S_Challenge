@@ -8,6 +8,7 @@
     "**/.ruff_cache": true,
     "**/.storage": true,
     "**/__pycache__": true,
+    "**/.pytest_cache": true
   },
   "material-icon-theme.folders.associations": {
     "protocol": "json",

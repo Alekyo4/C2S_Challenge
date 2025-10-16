@@ -12,7 +12,6 @@ class LLMProvider(ABC):
 
     api_key: str
 
-    @abstractmethod
     def __init__(self, api_key: str, system_prompt: str):
         self.api_key = api_key
 

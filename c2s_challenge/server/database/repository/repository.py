@@ -10,7 +10,6 @@ from ..orm import BaseORM
 
 
 class DatabaseRepository(ABC):
-    @abstractmethod
     def __init__(self, session: Session):
         raise NotImplementedError()
 
