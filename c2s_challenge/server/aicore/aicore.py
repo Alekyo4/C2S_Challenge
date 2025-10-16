@@ -11,22 +11,21 @@ from google.generativeai.types import (
 from pydantic import BaseModel
 
 from c2s_challenge.common.protocol.dto import ChatMessageDto
-from c2s_challenge.common.setting import SettingProvider
 
-from .model import LLMResponse
-from .provider import AgentAIProvider
+from .contracts import LLMResponse
+from .provider import LLMProvider
 
 
-class GeminiAgentAI(AgentAIProvider):
+class GeminiLLM(LLMProvider):
     model: GenerativeModel
 
-    def __init__(self, setting: SettingProvider):
-        super().__init__(setting)
+    def __init__(self, api_key: str, system_prompt):
+        super().__init__(api_key, system_prompt)
 
-        genai_configure(api_key=setting.get_required("GEMINI_API_KEY"))
+        genai_configure(api_key=self.api_key)
 
         self.model = GenerativeModel(
-            model_name="gemini-1.5-flash", system_instruction=self.system_prompt
+            model_name="gemini-2.5-flash-lite", system_instruction=self.system_prompt
         )
 
     def __to_genai_history(self, history: list[ChatMessageDto]) -> ContentsType:

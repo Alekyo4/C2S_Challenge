@@ -8,13 +8,13 @@ The architecture is heavily based on **Manual Dependency Injection** and **Separ
 
 ## 2. Technology Stack
 
-* **Language:** Python 3.11+
-* **Asynchronous Programming:** `asyncio`
-* **Database ORM:** `SQLAlchemy`
-* **Communication:** `asyncio.streams` TCP/IP Sockets
-* **Dependency Injection:** Custom framework with Factory Functions (Composition Root Pattern)
-* **Artificial Intelligence:** Integration with Generative Models (e.g., Google Gemini)
-* **Command-Line Interface:** `cli.py` (`Typer`)
+- **Language:** Python 3.11+
+- **Asynchronous Programming:** `asyncio`
+- **Database ORM:** `SQLAlchemy`
+- **Communication:** `asyncio.streams` TCP/IP Sockets
+- **Dependency Injection:** Custom framework with Factory Functions (Composition Root Pattern)
+- **Artificial Intelligence:** Integration with Generative Models (e.g., Google Gemini)
+- **Command-Line Interface:** `cli.py` (`Typer`)
 
 ## 3. Directory Structure
 
@@ -29,7 +29,7 @@ c2s_challenge/
 │   └── setting/
 └── server/
     ├── __init__.py         # Contains the `make_server_async` factory
-    ├── agent/              # Business logic and AI integration (AgentAI)
+    ├── aicore/             # Business logic and AI integration (LLM)
     ├── database/           # Data access layer (ORM, Repository)
     ├── event/              # Event routing (Router, Handlers)
     └── server.py
@@ -41,20 +41,20 @@ c2s_challenge/
 
 The architecture employs Dependency Injection (DI) manually. This pattern is centralized in the `__init__.py` files of the `server` and `client` modules.
 
-* **Factory Functions (`make_server_async`):** These functions are responsible for instantiating all classes and their dependencies, building the complete object graph, and manually "injecting" the instances into the constructors.
-* **Entry Point (`cli.py`):** The CLI is the sole component responsible for calling these factory functions to assemble the application and start its lifecycle.
+- **Factory Functions (`make_server_async`):** These functions are responsible for instantiating all classes and their dependencies, building the complete object graph, and manually "injecting" the instances into the constructors.
+- **Entry Point (`cli.py`):** The CLI is the sole component responsible for calling these factory functions to assemble the application and start its lifecycle.
 
 #### 4.2. Router-Handler Pattern (Event Dispatcher)
 
 The server's core operates on a dispatcher pattern to process requests.
 
-* **`Server` (`server.py`):** Manages the connection and delegates processing.
-* **`EventRouter` (`event/router.py`):** Acts as a central dispatcher that inspects the request's event type and invokes the appropriate `Handler`.
-* **`EventHandler` (`event/handler.py`):** Small, focused classes, each responsible for the logic of a single event type.
+- **`Server` (`server.py`):** Manages the connection and delegates processing.
+- **`EventRouter` (`event/router.py`):** Acts as a central dispatcher that inspects the request's event type and invokes the appropriate `Handler`.
+- **`EventHandler` (`event/handler.py`):** Small, focused classes, each responsible for the logic of a single event type.
 
-#### 4.3. `AgentAI` - Artificial Intelligence Layer
+#### 4.3. `LLM` - Artificial Intelligence Layer
 
-The `AgentAI` component (`server/agent`) encapsulates all logic for interacting with the generative language model. It abstracts the complexity of formatting prompts, calling the external API, and processing responses, providing simple methods for the `Handlers` to use.
+The `LLM` component (`server/aicore`) encapsulates all logic for interacting with the generative language model. It abstracts the complexity of formatting prompts, calling the external API, and processing responses, providing simple methods for the `Handlers` to use.
 
 ## 5. Execution Flow
 
@@ -69,7 +69,7 @@ graph TD
 
     subgraph "Injected Components"
         Repo["Repository"]
-        AgentAI["AgentAI"]
+        LLM["LLM"]
         Handlers["EventHandlers"]
         Router["EventRouter"]
     end
@@ -78,20 +78,20 @@ graph TD
         Server["Server (Socket Loop)"]
         HandlerImpl["Specific EventHandler"]
         RepoImpl["Repository"]
-        AgentAIImpl["AgentAI"]
+        LLMImpl["LLM"]
         DB["Database"]
         GenAI["AI Service (External)"]
     end
 
     CLI -->|calls| Factory
-    Factory -- builds and injects --> Server & Router & Handlers & Repo & AgentAI
+    Factory -- builds and injects --> Server & Router & Handlers & Repo & LLM
 
     Server -- forwards to --> Router
     Router -- dispatches to --> HandlerImpl
     HandlerImpl -- uses --> RepoImpl
-    HandlerImpl -- uses --> AgentAIImpl
+    HandlerImpl -- uses --> LLMImpl
     RepoImpl -- interacts with --> DB
-    AgentAIImpl -- interacts with --> GenAI
+    LLMImpl -- interacts with --> GenAI
 ```
 
 #### 5.2. CRUD Request Flow (Sequence Diagram)
@@ -130,7 +130,7 @@ sequenceDiagram
     participant Server
     participant Router
     participant AIChatHandler as Handler
-    participant AgentAI
+    participant LLM
     participant GenAI as "AI Service (External)"
 
     Client->>+Server: Sends question (bytes)
@@ -138,12 +138,12 @@ sequenceDiagram
     activate Router
     Router->>AIChatHandler: handle(Request DTO)
     activate AIChatHandler
-    AIChatHandler->>AgentAI: get_chat_response(prompt)
-    activate AgentAI
-    AgentAI->>GenAI: calls model API
-    GenAI-->>AgentAI: returns model response
-    AgentAI-->>AIChatHandler: Returns processed text
-    deactivate AgentAI
+    AIChatHandler->>LLM: get_chat_response(prompt)
+    activate LLM
+    LLM->>GenAI: calls model API
+    GenAI-->>LLM: returns model response
+    LLM-->>AIChatHandler: Returns processed text
+    deactivate LLM
     AIChatHandler-->>Router: Returns Response DTO
     deactivate AIChatHandler
     Router-->>-Server: Returns Response DTO
@@ -160,13 +160,13 @@ sequenceDiagram
 
     CLI->>+Factory: make_server_async()
     Note over Factory: Building the dependency graph
-    Factory->>Factory: new AgentAI()
+    Factory->>Factory: new LLM()
     Factory->>Factory: new Repository()
-    Factory->>Factory: new AIHandler(agent_ai)
+    Factory->>Factory: new AIHandler(llm)
     Factory->>Factory: new EventRouter(handlers={...})
     Factory->>Server: new AsyncServer(router, ...)
     Factory-->>-CLI: Returns complete Server instance
-    
+
     CLI->>Server: server.listen()
     activate Server
 ```

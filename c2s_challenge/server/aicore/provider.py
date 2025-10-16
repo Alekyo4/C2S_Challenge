@@ -3,16 +3,20 @@ from abc import ABC, abstractmethod
 from pydantic import BaseModel
 
 from c2s_challenge.common.protocol.dto import ChatMessageDto
-from c2s_challenge.common.setting import SettingProvider
 
-from .model import LLMResponse
+from .contracts import LLMResponse
 
 
-class AgentAIProvider(ABC):
+class LLMProvider(ABC):
     system_prompt: str
 
-    def __init__(self, setting: SettingProvider):
-        self.system_prompt = setting.get_required("AGENT_SYSTEM_PROMPT")
+    api_key: str
+
+    @abstractmethod
+    def __init__(self, api_key: str, system_prompt: str):
+        self.api_key = api_key
+
+        self.system_prompt = system_prompt
 
     @abstractmethod
     async def get_chat_response(

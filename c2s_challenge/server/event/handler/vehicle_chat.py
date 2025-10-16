@@ -4,17 +4,17 @@ from c2s_challenge.common.protocol.dto import (
     VehicleChatODto,
     VehicleFilterDto,
 )
-from c2s_challenge.server.agent import AgentAIProvider
-from c2s_challenge.server.agent.model import LLMResponse
+from c2s_challenge.server.aicore import LLMProvider
+from c2s_challenge.server.aicore.contracts import LLMResponse
 
 from ..provider import EventHandler
 
 
 class VehicleChatHandler(EventHandler):
-    agent_ai: AgentAIProvider
+    llm: LLMProvider
 
-    def __init__(self, agent_ai: AgentAIProvider):
-        self.agent_ai = agent_ai
+    def __init__(self, llm: LLMProvider):
+        self.llm = llm
 
     async def handle(self, data: VehicleChatIDto) -> Response:
         chat_tool: dict[str, any] = {
@@ -22,7 +22,7 @@ class VehicleChatHandler(EventHandler):
             "description": "Search for vehicles in the database using filters extracted from the conversation with the user",
         }
 
-        res_chat: LLMResponse = await self.agent_ai.get_chat_response(
+        res_chat: LLMResponse = await self.llm.get_chat_response(
             history=data.history,
             tools=[chat_tool],
         )
@@ -34,7 +34,7 @@ class VehicleChatHandler(EventHandler):
 
             return Response(status="success", data=result)
 
-        res_extract: LLMResponse = await self.agent_ai.extract_structured(
+        res_extract: LLMResponse = await self.llm.extract_structured(
             history=data.history, schema=VehicleFilterDto
         )
 
